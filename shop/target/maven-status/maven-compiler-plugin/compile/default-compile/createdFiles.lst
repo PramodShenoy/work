@@ -1,3 +1,4 @@
 shop/PaymentController.class
+shop/Application.class
 shop/PaymentRequest.class
 shop/PaymentResponse.class
