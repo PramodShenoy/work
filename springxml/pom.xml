@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.2.RELEASE</version>
+        <version>1.5.9.RELEASE</version>
     </parent>
 
     <properties>
@@ -29,6 +29,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <version>1.5.9.RELEASE</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -38,12 +39,12 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160212</version>
+            <version>20180130</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,4 @@
 package springxml;
-
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,9 @@ public class Controller {
     @GetMapping("/customer")
     public String getCustomer(){
         String xml="";
+        if (cs_list.isEmpty())
+            return "empty";
+        else
         for (springxml.Customer item:cs_list) {
             JSONObject json = new JSONObject(item);
             xml = xml.concat(XML.toString(json,"customer"));
