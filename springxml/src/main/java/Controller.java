@@ -23,7 +23,7 @@ public class Controller {
         for (springxml.Customer item:cs_list) {
             JSONObject json = new JSONObject(item);
             xml = xml.concat(XML.toString(json,"customer"));
-            System.out.println(xml);
+            //System.out.println(xml);
         }
         //XML.toJSONObject(java.lang.String string) for converting XML to JSON
        return xml;
