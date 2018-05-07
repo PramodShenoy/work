@@ -20,20 +20,20 @@ public class Controller {
     springxml.Customer cs=null;
     ArrayList<springxml.Customer> cs_list=new ArrayList<>();
     @GetMapping("/customer")
-    public Document getCustomer(){
+    public String getCustomer(){
         String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<customers>";
         if (cs_list.isEmpty())
             return null;
         else
         for (springxml.Customer item:cs_list) {
             JSONObject json = new JSONObject(item);
-            xml = xml.concat("\n");
+            xml = xml + "\n";
             xml = xml.concat(XML.toString(json,"customer"));
             //System.out.println(xml);
         }
         xml = xml.concat("\n</customers>");
         System.out.println(xml);
-        Document doc=null;
+        /*Document doc=null;
         try
         {
            doc = loadXML(xml);
@@ -41,7 +41,8 @@ public class Controller {
         {
             e.printStackTrace();
         }
-       return doc;
+       return doc;*/
+        return xml;
     }
 
     @PostMapping("/customer")

@@ -20,7 +20,7 @@ public class PaymentController {
     private static final int AUTH_FAILURE = 102;
     private shop.PaymentRequest re=null;
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
-    public shop.PaymentResponse pay(@RequestParam(value = "key") String key, @RequestBody shop.PaymentRequest request) {
+    public String pay(@RequestParam(value = "key") String key, @RequestBody shop.PaymentRequest request) {
 
         shop.PaymentResponse response = new shop.PaymentResponse();
         if(sharedKey.equalsIgnoreCase(key))
@@ -48,7 +48,7 @@ public class PaymentController {
             response.setStatus(ERROR_STATUS);
             response.setCode(AUTH_FAILURE);
         }
-        return response;
+        return "DONE";
     }
     @RequestMapping(value="/value",method = RequestMethod.GET)
     public double value()
@@ -57,10 +57,11 @@ public class PaymentController {
             System.out.println("----------------------" + re.getItemId() + "-----------------------");
             System.out.println("----------------------" + re.getUserId() + "-----------------------");
             System.out.println("----------------------" + re.getDiscount() + "-----------------------");
-            double val = 1000 - re.getDiscount() * Double.parseDouble(re.getItemId());
-            return val;
+            if(re.getDiscount()!=0.0 && re.getItemId()!=null) {
+                double val = 1000 - re.getDiscount() * Double.parseDouble(re.getItemId());
+                return val;
+            }
         }
-        else
-            return 0.0;
+        return 0.0;
     }
 }
