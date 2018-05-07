@@ -25,6 +25,7 @@ public class GithubService {
         logger.info("Looking up " + user);
         String url = String.format("https://api.github.com/users/%s", user);
         github_async.User results = restTemplate.getForObject(url, github_async.User.class);
+        System.out.println(results);
         // Artificial delay of 1s for demonstration purposes
         Thread.sleep(1000L);
         return CompletableFuture.completedFuture(results);

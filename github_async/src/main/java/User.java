@@ -7,6 +7,16 @@ public class User {
 
     private String name;
     private String blog;
+    private String location;
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+
+        return location;
+    }
 
     public String getName() {
         return name;
@@ -26,7 +36,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [name=" + name + ", blog=" + blog + "]";
+        return "User [name=" + name + ", blog=" + blog + ",location="+ location +" ]";
     }
 
 }
