@@ -9,8 +9,5 @@
         <module name="github_async" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="github_async" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
