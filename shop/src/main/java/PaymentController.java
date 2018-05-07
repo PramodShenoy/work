@@ -39,7 +39,6 @@ public class PaymentController {
             System.out.println("+++++++++++++++++++++"+userId+"+++++++++++++++++");
             System.out.println("+++++++++++++++++++++"+itemId+"+++++++++++++++++");
             System.out.println("+++++++++++++++++++++"+discount+"+++++++++++++++++");
-
             response.setStatus(SUCCESS_STATUS);
             response.setCode(CODE_SUCCESS);
         }
