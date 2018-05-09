@@ -41,7 +41,6 @@ public class MyController {
         uniDAO.addUni(uni);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/uni/{name}").buildAndExpand(uni.getName()).toUri());
-        headers.setLocation(builder.path("/{country}").buildAndExpand(uni.getCountry()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
