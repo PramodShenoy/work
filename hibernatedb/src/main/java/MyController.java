@@ -18,7 +18,7 @@ import hibernatedb.Article;
 @RequestMapping("user")
 public class MyController {
     @Autowired
-    private hibernatedb.IArticleService articleService;
+    private hibernatedb.ArticleService articleService;
     @GetMapping("article/{id}")
     public ResponseEntity<Article> getArticleById(@PathVariable("id") Integer id) {
         hibernatedb.Article article = articleService.getArticleById(id);

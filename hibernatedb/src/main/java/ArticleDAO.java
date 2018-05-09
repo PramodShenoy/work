@@ -1,4 +1,5 @@
 package hibernatedb;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,8 +38,7 @@ public class ArticleDAO implements hibernatedb.IArticleDAO {
     @Override
     public boolean articleExists(String title, String category) {
         String hql = "FROM Article as atcl WHERE atcl.title = ? and atcl.category = ?";
-        int count = entityManager.createQuery(hql).setParameter(1, title)
-                .setParameter(2, category).getResultList().size();
-        return count > 0 ? true : false;
+        int count = entityManager.createQuery(hql).setParameter(1, title).setParameter(2, category).getResultList().size();
+        return count > 0;
     }
 }
