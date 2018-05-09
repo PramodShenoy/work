@@ -16,21 +16,6 @@ import java.util.List;
 public class MyController {
     @Autowired
     private UniDAO uniDAO;
-    /*@GetMapping("uni/{name}")
-    public ResponseEntity<Uni> getUniByName(@PathVariable("name") String name)
-    {
-        Uni res = uniDAO.getUnibyName(name);
-        System.out.println("+++++++++++++++++++++"+res+"+++++++++++++++++++");
-        return new ResponseEntity<Uni>(res,HttpStatus.OK);
-    }
-    //loclahost:8080/?country=USA
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Uni>> getUniByCntry(@RequestParam(value = "country") String country)
-    {
-       List<Uni> list = uniDAO.getUnibyCountry(country);
-       return new ResponseEntity<List<Uni>>(list,HttpStatus.OK);
-    }*/
-
     @RequestMapping(value = "/uni", params = "name")
     public ResponseEntity<List<Uni>> getUniByName(@RequestParam String name)
     {
