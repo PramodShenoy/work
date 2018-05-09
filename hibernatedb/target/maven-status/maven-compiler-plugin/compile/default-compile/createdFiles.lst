@@ -1,0 +1,7 @@
+hibernatedb/ArticleDAO.class
+hibernatedb/Article.class
+hibernatedb/Application.class
+hibernatedb/IArticleDAO.class
+hibernatedb/MyController.class
+hibernatedb/IArticleService.class
+hibernatedb/ArticleService.class
