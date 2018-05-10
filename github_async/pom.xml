@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <start-class>github_async.Application</start-class>
     </properties>
 
     <dependencies>
@@ -53,11 +54,10 @@
             <version>20180130</version>
         </dependency>
     </dependencies>
-
-    <build>
+  <!--  <build>
         <plugins>
             <plugin>
-                <!-- Build an executable JAR -->
+                &lt;!&ndash; Build an executable JAR &ndash;&gt;
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
@@ -66,13 +66,19 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Application</mainClass>
+                            <mainClass>github_async.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
+    </build>-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
-
-
 </project>
