@@ -35,13 +35,13 @@ public class Application {
         ME.listEmployees();
 
         /* Update employee's records */
-        ME.updateEmployee(empID1, 5000);
+        /*ME.updateEmployee(empID1, 5000);
 
-        /* Delete an employee from the database */
+        *//* Delete an employee from the database *//*
         ME.deleteEmployee(empID2);
 
-        /* List down new list of the employees */
-        ME.listEmployees();
+        *//* List down new list of the employees *//*
+        ME.listEmployees();*/
     }
 
     /* Method to CREATE an employee in the database */

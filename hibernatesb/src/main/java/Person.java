@@ -13,12 +13,14 @@ public class Person {
     private Long id;
     @Column(name = "pname")
     private String name;
-    @Column(name = "pcity")
+    @Column(name = "city")
     private String city;
-    public Person() {
+    public Person()
+    {
         super();
     }
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
     public void setId(Long id) {
