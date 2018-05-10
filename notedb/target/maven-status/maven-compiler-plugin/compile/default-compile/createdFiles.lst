@@ -1,0 +1,5 @@
+notedb/Application.class
+notedb/ResourceNotFoundException.class
+notedb/Note.class
+notedb/NoteRepository.class
+notedb/MyController.class
