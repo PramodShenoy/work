@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cf</groupId>
-    <artifactId>crono</artifactId>
+    <artifactId>advcrono</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -67,6 +67,12 @@
           </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>0.10.1</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
