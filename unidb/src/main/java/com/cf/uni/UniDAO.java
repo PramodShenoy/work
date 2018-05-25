@@ -1,8 +1,8 @@
-package unidb;
+package com.cf.uni;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import unidb.Uni;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;

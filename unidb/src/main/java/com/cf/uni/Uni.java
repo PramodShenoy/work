@@ -1,4 +1,4 @@
-package unidb;
+package com.cf.uni;
 
 import javax.persistence.*;
 import java.io.Serializable;

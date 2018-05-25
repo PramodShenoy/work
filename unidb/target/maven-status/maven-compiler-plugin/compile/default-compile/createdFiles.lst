@@ -1,4 +1,4 @@
-unidb/MyController.class
-unidb/Uni.class
-unidb/UniDAO.class
-unidb/Application.class
+com/cf/uni/Uni.class
+com/cf/uni/Application.class
+com/cf/uni/MyController.class
+com/cf/uni/UniDAO.class
