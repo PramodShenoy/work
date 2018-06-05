@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @Controller
@@ -18,6 +19,8 @@ public class MyController
 {
     @Autowired
     private laptopdb.LaptopDAO laptopDAO;
+    @Autowired
+    private DataSource dataSource;
 
     @GetMapping("/laptop/{name}")
     public ResponseEntity<laptopdb.Laptop> getLaptopByName(@PathVariable("name") String name)
@@ -29,6 +32,7 @@ public class MyController
     @GetMapping("/laptop")
     public ResponseEntity<List<laptopdb.Laptop>> getLaptops()
     {
+        System.out.println("DATASOURCE IS: " + dataSource);
         List<laptopdb.Laptop> list = laptopDAO.getAllLaptops();
         return new ResponseEntity<List<laptopdb.Laptop>>(list,HttpStatus.OK);
     }

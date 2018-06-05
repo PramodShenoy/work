@@ -32,7 +32,7 @@ public class LaptopDAO
     public void add(laptopdb.Laptop laptop)
     {
         boolean flag = check(laptop.getName());
-        if(flag==false) {
+        if(!flag) {
             String query = "INSERT into laptop(name,brand,gpu,price) VALUES (?,?,?,?)";
             jdbcTemplate.update(query, laptop.getName(), laptop.getBrand(), laptop.getGpu(), laptop.getPrice());
         }
