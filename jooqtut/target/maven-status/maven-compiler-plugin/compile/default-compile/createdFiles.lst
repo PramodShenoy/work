@@ -1,0 +1,15 @@
+com/capitalfloat/jooq/model/tables/records/AuthorRecord.class
+com/capitalfloat/jooq/model/Keys$ForeignKeys0.class
+com/capitalfloat/jooq/model/tables/Author.class
+com/capitalfloat/jooq/model/tables/records/BookRecord.class
+com/capitalfloat/jooq/model/Library.class
+com/capitalfloat/jooq/model/Keys$UniqueKeys0.class
+com/capitalfloat/jooq/model/Tables.class
+com/capitalfloat/jooq/model/tables/records/BookStoreRecord.class
+com/capitalfloat/jooq/Example.class
+com/capitalfloat/jooq/model/tables/BookStore.class
+com/capitalfloat/jooq/model/tables/BookToBookStore.class
+com/capitalfloat/jooq/model/DefaultCatalog.class
+com/capitalfloat/jooq/model/tables/Book.class
+com/capitalfloat/jooq/model/Keys.class
+com/capitalfloat/jooq/model/tables/records/BookToBookStoreRecord.class
