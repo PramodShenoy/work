@@ -1,0 +1,10 @@
+com/cf/jooq/Keys.class
+com/cf/rest/ConnectionService.class
+com/cf/jooq/tables/Uni.class
+com/cf/jooq/Keys$UniqueKeys0.class
+com/cf/jooq/tables/records/UniRecord.class
+com/cf/jooq/Jooq.class
+com/cf/rest/Application.class
+com/cf/rest/MyController.class
+com/cf/jooq/Tables.class
+com/cf/DefaultCatalog.class
