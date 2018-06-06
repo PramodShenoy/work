@@ -1,7 +1,5 @@
 package com.cf.rest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +14,12 @@ public class ConnectionService {
 
     private Connection con;
 
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.
                     getConnection("jdbc:mysql://localhost:3306/jooq?useSSL=false"
-                            ,"root","pramod");
+                            , "root", "pramod");
             Statement stmt = con.createStatement();
             System.out.println("Created DB Connection....");
         } catch (ClassNotFoundException e) {
