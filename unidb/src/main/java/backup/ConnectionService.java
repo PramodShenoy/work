@@ -1,0 +1,37 @@
+package backup;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+@Component
+@Configuration
+public class ConnectionService {
+
+    private Connection con;
+
+    public Connection getConnection() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.
+                    getConnection("jdbc:postgresql://localhost:5432/trialdb"
+                            , "pramod", "pramod");
+            Statement stmt = con.createStatement();
+            System.out.println("Created DB Connection....");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            System.out.println("CLASS NOT FOUND");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.out.println("SQL EXCEPTION");
+            e.printStackTrace();
+        }
+        return con;
+    }
+
+}
