@@ -28,10 +28,10 @@ public class MyController {
     @RequestMapping(value = "/get")
     public ResponseEntity<String> get() {
         DSLContext dslContext;
-        int fy = 2017;
-        int ty = 2018;
-        String fm = "sep";
-        String tm = "jan";
+        int fy = 2016;
+        int ty = 2017;
+        String fm = "jan";
+        String tm = "dec";
         try {
             double sum = 0.0;
             boolean flag = checkFinancialYear(fm, tm, fy, ty);
@@ -63,7 +63,7 @@ public class MyController {
                             where(TAX.TO_YEAR.eq(fy)).fetch();
                     sum+=getSumFromTo(fm,result,"mar");
                     fm="apr";
-                    while (fy < ty-1)
+                    while (fy <=ty-1)
                     {
                         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                                 where(TAX.FROM_YEAR.eq(fy)).fetch();
