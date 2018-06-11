@@ -3,6 +3,7 @@
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/Tax.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/Uni.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/Filings.java
+/home/pramod/Desktop/work/project/src/main/java/com/app/FilingsPojo.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/FilingsRecord.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/Sequences.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/Qs.java
@@ -11,5 +12,7 @@
 /home/pramod/Desktop/work/project/src/main/java/com/app/Application.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/Public.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/TaxRecord.java
+/home/pramod/Desktop/work/project/src/main/java/com/app/enums/MonthEnum.java
+/home/pramod/Desktop/work/project/src/main/java/com/app/enums/EnumIdInterface.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/Keys.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/UniRecord.java

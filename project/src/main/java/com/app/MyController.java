@@ -24,36 +24,76 @@ public class MyController {
 
     @Autowired
     private DataSource dataSource;
+    private int count=0;
     @RequestMapping(value = "/get")
     public ResponseEntity<String> get() {
         DSLContext dslContext;
-        int fy = 2016;
+        int fy = 2017;
         int ty = 2018;
-        String fm = "may";
+        String fm = "sep";
         String tm = "jan";
         try {
             double sum = 0.0;
             boolean flag = checkFinancialYear(fm, tm, fy, ty);
-            log.info(Boolean.toString(flag));
             dslContext = DSL.using(dataSource.getConnection());
             if (!flag) {
                 if (!checkInJanFebMar(fm)) {
+                    log.info("ENTER 1");
                     Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                             where(TAX.FROM_YEAR.eq(fy)).fetch();
                     sum += getSumFromTo(fm, result, "mar");
                     fy++;
                     fm="apr";
-                    while (fy < ty-1 && !checkInJanFebMar(tm)) {
+                    while (fy < ty-1) {
                         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                                 where(TAX.FROM_YEAR.eq(fy)).fetch();
-                        sum += getSumFromTo("apr", result, "mar");
-                        log.info(Double.toString(sum));
+                        sum += getSumFromTo(fm, result, "mar");
                         fy++;
                     }
                     result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                             where(TAX.FROM_YEAR.eq(fy)).fetch();
                     sum+=getSumFromTo(fm,result,tm);
                     log.info(Double.toString(sum));
+                    log.info(Double.toString(count));
+                }
+                else
+                {
+                    log.info("ENTER 2");
+                    Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                            where(TAX.TO_YEAR.eq(fy)).fetch();
+                    sum+=getSumFromTo(fm,result,"mar");
+                    fm="apr";
+                    while (fy < ty-1)
+                    {
+                        result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                                where(TAX.FROM_YEAR.eq(fy)).fetch();
+                        sum += getSumFromTo(fm, result, "mar");
+                        fy++;
+                    }
+                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                    sum+=getSumFromTo(fm,result,tm);
+                    log.info(Double.toString(sum));
+                    log.info(Double.toString(count));
+                }
+            }
+            else
+            {
+                if(checkInJanFebMar(fm))
+                {
+                    Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                            where(TAX.TO_YEAR.eq(fy)).fetch();
+                    sum+=getSumFromTo(fm,result,tm);
+                    log.info(Double.toString(sum));
+                    log.info(Double.toString(count));
+                }
+                else
+                {
+                    Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                    sum+=getSumFromTo(fm,result,tm);
+                    log.info(Double.toString(sum));
+                    log.info(Double.toString(count));
                 }
             }
 
@@ -75,11 +115,13 @@ public class MyController {
                String in = MonthEnum.from(i).label();
                log.info(result.getValue(0, in).toString());
                sum += Double.parseDouble(result.getValue(0, in).toString());
+               count++;
                i=(i+1)%12;
                if(i==0)
                    i=12;
            }
             sum += Double.parseDouble(result.getValue(0, MonthEnum.from(i).label()).toString());
+           count++;
         } catch (Exception e) {
             log.error("ENUM ERROR ", e);
         }
