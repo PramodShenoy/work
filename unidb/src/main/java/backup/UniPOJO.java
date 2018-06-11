@@ -9,6 +9,13 @@ public class UniPOJO {
     public UniPOJO() {
     }
 
+    public UniPOJO(int id, String name, String city, String country) {
+        this.id = id;
+        this.name = name;
+        this.city = city;
+        this.country = country;
+    }
+
     @Override
     public String toString() {
         return "UniPOJO{" +
