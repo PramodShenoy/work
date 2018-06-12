@@ -17,8 +17,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static com.cf.public_.Tables.FILINGS;
-import static com.cf.public_.Tables.TAX;
+
 
 @RestController
 @Slf4j
@@ -29,8 +28,10 @@ public class MyController {
     private InsertDataService insertDataService;
     @Autowired
     private UpdateService updateService;
+    @Autowired
+    private DeleteDataService deleteDataService;
 
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/getRange", method = RequestMethod.POST)
     public ResponseEntity<String> get(@RequestBody Request request)
     {
         String fm = request.getFrom_month().toLowerCase().substring(0,3);
@@ -46,7 +47,7 @@ public class MyController {
     public ResponseEntity<String> insert(@RequestBody DBEntry dbEntry)
     {
         if(insertDataService.insertData(dbEntry)==0)
-            return new ResponseEntity<>("DONE",HttpStatus.OK);
+            return new ResponseEntity<>("INSERTED SUCCESSFULLY IN TABLES",HttpStatus.OK);
         return new ResponseEntity<>("ERROR IN INSERTING",HttpStatus.OK);
     }
 
@@ -57,4 +58,13 @@ public class MyController {
             return new ResponseEntity<>("UPDATE DONE",HttpStatus.OK);
         return new ResponseEntity<>("ERROR IN FINDING ROW",HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public ResponseEntity<String> delete(@RequestBody DBEntry dbEntry)
+    {
+        if(deleteDataService.deleteData(dbEntry)==0)
+            return new ResponseEntity<>("SUCCESSFULLY DELETED",HttpStatus.OK);
+        return new ResponseEntity<>("ERROR IN FINDING ROW",HttpStatus.OK);
+    }
+
 }
