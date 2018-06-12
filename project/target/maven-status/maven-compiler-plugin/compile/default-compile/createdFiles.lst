@@ -1,4 +1,5 @@
 com/app/InsertDataService.class
+com/app/QueryService.class
 com/app/Request.class
 com/cf/public_/Keys$Identities0.class
 com/app/enums/FilingFrequencyEnum.class

@@ -6,9 +6,9 @@ import java.util.Map;
 
 public enum TaxTypeEnum {
 
-    VAT(1,"VAT"),
-    ST(2,"ST"),
-    CST(3,"CST");
+    VAT(1, "VAT"),
+    ST(2, "ST"),
+    CST(3, "CST");
 
     private static final Map<Integer, FilingFrequencyEnum> lookup = new HashMap<>();
 

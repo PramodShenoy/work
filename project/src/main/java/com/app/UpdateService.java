@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-
 import java.math.BigDecimal;
 
 import static com.cf.public_.Tables.FILINGS;
@@ -20,13 +19,11 @@ public class UpdateService {
     private DataSource dataSource;
     private DSLContext dslContext;
 
-    public int updateFilingsData(DBEntry dbEntry)
-    {
+    public int updateFilingsData(DBEntry dbEntry) {
         try {
             dslContext = DSL.using(dataSource.getConnection());
             FilingsRecord filingsRecord = dslContext.selectFrom(FILINGS).where(FILINGS.ID.eq(dbEntry.getId())).fetchOne();
-            if(filingsRecord!=null)
-            {
+            if (filingsRecord != null) {
                 filingsRecord.setJan(BigDecimal.valueOf(dbEntry.getJan()));
                 filingsRecord.setFeb(BigDecimal.valueOf(dbEntry.getFeb()));
                 filingsRecord.setMar(BigDecimal.valueOf(dbEntry.getMar()));
@@ -42,8 +39,7 @@ public class UpdateService {
                 filingsRecord.store();
                 return 0;
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("ERROR " + e);
         }
         return -1;

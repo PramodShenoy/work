@@ -57,7 +57,7 @@ public class CalculationService {
         Map<String, Double> resultMap = new HashMap<>();
         resultMap.put("Sum", sum);
         resultMap.put("Avg", avg);
-        count=0;
+        count = 0;
         return resultMap;
     }
 
