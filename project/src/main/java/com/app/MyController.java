@@ -35,7 +35,7 @@ public class MyController {
         int fy = 2015;
         int ty = 2019;
         String fm = "may";
-        String tm = "jan";
+        String tm = "feb";
         UUID app_id = UUID.fromString("40e6215d-b5c6-4896-987c-f30f3678f608");
         String state = "maharashtra";
         int tax_type = 1;
@@ -54,42 +54,23 @@ public class MyController {
                     fy++;
                     fm = "apr";
                     log.info("FIRST FY COUNT " + count);
-                    if(!checkInJanFebMar(tm))
+                    if(checkInJanFebMar(tm))
+                        ty--;
+                    while (fy < ty)
                     {
-                        while (fy < ty)
-                        {
-                            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                                    .fetch();
-                            sum += getSumFromTo(fm, result, "mar");
-                            fy++;
-                            log.info("LOOP COUNT " + count);
-                        }
-                        log.info("FY IS " + fy);
                         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                                 where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
                                 .fetch();
-                        //log.info(result.toString());
-                        sum += getSumFromTo(fm, result, tm);
+                        sum += getSumFromTo(fm, result, "mar");
+                        fy++;
+                        log.info("LOOP COUNT " + count);
                     }
-                    else
-                    {
-                        while (fy < ty-1)
-                        {
-                            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                                    .fetch();
-                            sum += getSumFromTo(fm, result, "mar");
-                            fy++;
-                            log.info("LOOP COUNT " + count);
-                        }
-                        log.info("FY IS " + fy);
-                        result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                                where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                                .fetch();
-                        //log.info(result.toString());
-                        sum += getSumFromTo(fm, result, tm);
-                    }
+                    log.info("FY IS " + fy);
+                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
+                    //log.info(result.toString());
+                    sum += getSumFromTo(fm, result, tm);
                     log.info(Double.toString(sum));
                     log.info("FINAL COUNT " + count);
                 }
