@@ -32,10 +32,10 @@ public class MyController {
 
     @RequestMapping(value = "/get")
     public ResponseEntity<String> get() {
-        int fy = 2015;
+        int fy = 2018;
         int ty = 2019;
-        String fm = "may";
-        String tm = "jan";
+        String fm = "aug";
+        String tm = "feb";
         UUID app_id = UUID.fromString("40e6215d-b5c6-4896-987c-f30f3678f608");
         String state = "maharashtra";
         int tax_type = 1;
@@ -44,25 +44,22 @@ public class MyController {
             boolean flag = checkFinancialYear(fm, tm, fy, ty);
             dslContext = DSL.using(dataSource.getConnection());
             if (!flag) {
-                sum+=getSumRangeFinancialYear(fm,fy,tm,ty,app_id);
+                sum += getSumRangeFinancialYear(fm, fy, tm, ty, app_id);
                 log.info(Double.toString(sum));
                 log.info("FINAL COUNT " + count);
             } else {
-                if (checkInJanFebMar(fm)) {
-                    Result<?> result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                Result<?> result;
+                if (checkInJanFebMar(fm))
+                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                             where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
                             .fetch();
-                    sum += getSumFromTo(fm, result, tm);
-                    log.info(Double.toString(sum));
-                    log.info(Double.toString(count));
-                } else {
-                    Result<?> result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                else
+                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                             where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
                             .fetch();
-                    sum += getSumFromTo(fm, result, tm);
-                    log.info(Double.toString(sum));
-                    log.info(Double.toString(count));
-                }
+                sum += getSumFromTo(fm, result, tm);
+                log.info(Double.toString(sum));
+                log.info("FINAL COUNT " + count);
             }
         } catch (Exception e) {
             log.error("SQL EXCEPTION ", e);
@@ -71,17 +68,15 @@ public class MyController {
         return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
-    public double getSumRangeFinancialYear(String fm,int fy,String tm,int ty,UUID app_id)
-    {
-        double sum=0.0;
+    public double getSumRangeFinancialYear(String fm, int fy, String tm, int ty, UUID app_id) {
+        double sum = 0.0;
         Result<?> result;
         if (!checkInJanFebMar(fm)) {
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                     where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
             fy++;
-        }
-        else
+        } else
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
                     where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
@@ -105,6 +100,7 @@ public class MyController {
         sum += getSumFromTo(fm, result, tm);
         return sum;
     }
+
     public double getSumFromTo(String fm, Result<?> result, String tm) {
         double sum = 0.0;
         int startIndex = MonthEnum.valueOf(fm).id();
