@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 
+import java.util.UUID;
+
 import static com.cf.public_.Tables.FILINGS;
 import static com.cf.public_.Tables.TAX;
 
@@ -28,10 +30,11 @@ public class MyController {
     @RequestMapping(value = "/get")
     public ResponseEntity<String> get() {
         DSLContext dslContext;
-        int fy = 2016;
+        int fy = 2017;
         int ty = 2017;
-        String fm = "jan";
+        String fm = "may";
         String tm = "dec";
+        UUID app_id = UUID.fromString("40e6215d-b5c6-4896-987c-f30f3678f608");
         try {
             double sum = 0.0;
             boolean flag = checkFinancialYear(fm, tm, fy, ty);
@@ -40,18 +43,21 @@ public class MyController {
                 if (!checkInJanFebMar(fm)) {
                     log.info("ENTER 1");
                     Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum += getSumFromTo(fm, result, "mar");
                     fy++;
                     fm="apr";
                     while (fy < ty-1) {
                         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                                where(TAX.FROM_YEAR.eq(fy)).fetch();
+                                where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                                .fetch();
                         sum += getSumFromTo(fm, result, "mar");
                         fy++;
                     }
                     result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum+=getSumFromTo(fm,result,tm);
                     log.info(Double.toString(sum));
                     log.info(Double.toString(count));
@@ -60,18 +66,21 @@ public class MyController {
                 {
                     log.info("ENTER 2");
                     Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.TO_YEAR.eq(fy)).fetch();
+                            where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum+=getSumFromTo(fm,result,"mar");
                     fm="apr";
                     while (fy <=ty-1)
                     {
                         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                                where(TAX.FROM_YEAR.eq(fy)).fetch();
+                                where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                                .fetch();
                         sum += getSumFromTo(fm, result, "mar");
                         fy++;
                     }
                     result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum+=getSumFromTo(fm,result,tm);
                     log.info(Double.toString(sum));
                     log.info(Double.toString(count));
@@ -82,7 +91,8 @@ public class MyController {
                 if(checkInJanFebMar(fm))
                 {
                     Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.TO_YEAR.eq(fy)).fetch();
+                            where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum+=getSumFromTo(fm,result,tm);
                     log.info(Double.toString(sum));
                     log.info(Double.toString(count));
@@ -90,7 +100,8 @@ public class MyController {
                 else
                 {
                     Result result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy)).fetch();
+                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                            .fetch();
                     sum+=getSumFromTo(fm,result,tm);
                     log.info(Double.toString(sum));
                     log.info(Double.toString(count));
