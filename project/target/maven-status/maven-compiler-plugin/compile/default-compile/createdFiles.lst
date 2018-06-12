@@ -1,3 +1,4 @@
+com/app/InsertDataService.class
 com/app/Request.class
 com/cf/public_/Keys$Identities0.class
 com/app/enums/FilingFrequencyEnum.class
@@ -16,6 +17,7 @@ com/cf/DefaultCatalog.class
 com/cf/public_/tables/Uni.class
 com/app/enums/TaxTypeEnum.class
 com/app/enums/EnumIdInterface.class
+com/app/UpdateService.class
 com/cf/public_/tables/Filings.class
 com/cf/public_/tables/Tax.class
 com/app/DBEntry.class
