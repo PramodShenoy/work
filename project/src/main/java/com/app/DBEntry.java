@@ -11,64 +11,31 @@ import java.util.UUID;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DBEntry {
+
     UUID app_id;
     @GeneratedValue
     int id;
-    int from_year;
     String state;
-
-    @Override
-    public String toString() {
-        return "DBEntry{" +
-                "app_id=" + app_id +
-                ", id=" + id +
-                ", from_year=" + from_year +
-                ", state='" + state + '\'' +
-                ", to_year=" + to_year +
-                ", tax_type=" + tax_type +
-                ", filing_frequency=" + filing_frequency +
-                ", jan='" + jan + '\'' +
-                ", feb='" + feb + '\'' +
-                ", mar='" + mar + '\'' +
-                ", apr='" + apr + '\'' +
-                ", may='" + may + '\'' +
-                ", jun='" + jun + '\'' +
-                ", jul='" + jul + '\'' +
-                ", aug='" + aug + '\'' +
-                ", sep='" + sep + '\'' +
-                ", oct='" + oct + '\'' +
-                ", nov='" + nov + '\'' +
-                ", dec='" + dec + '\'' +
-                '}';
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
+    int from_year;
     int to_year;
-    int tax_type;
-    int filing_frequency;
-    String jan;
-    String feb;
-    String mar;
-    String apr;
-    String may;
-    String jun;
-    String jul;
-    String aug;
-    String sep;
-    String oct;
-    String nov;
-    String dec;
-
+    String tax_type;
+    String filing_frequency;
+    double jan;
+    double feb;
+    double mar;
+    double apr;
+    double may;
+    double jun;
+    double jul;
+    double aug;
+    double sep;
+    double oct;
+    double nov;
+    double dec;
 
     public DBEntry() {
     }
+
 
     public UUID getApp_id() {
         return app_id;
@@ -84,6 +51,14 @@ public class DBEntry {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public int getFrom_year() {
@@ -102,115 +77,140 @@ public class DBEntry {
         this.to_year = to_year;
     }
 
-    public int getTax_type() {
+    public String getTax_type() {
         return tax_type;
     }
 
-    public void setTax_type(int tax_type) {
+    public void setTax_type(String tax_type) {
         this.tax_type = tax_type;
     }
 
-    public int getFiling_frequency() {
+    public String getFiling_frequency() {
         return filing_frequency;
     }
 
-    public void setFiling_frequency(int filing_frequency) {
+    public void setFiling_frequency(String filing_frequency) {
         this.filing_frequency = filing_frequency;
     }
 
-    public String getJan() {
+    public double getJan() {
         return jan;
     }
 
-    public void setJan(String jan) {
+    public void setJan(double jan) {
         this.jan = jan;
     }
 
-    public String getFeb() {
+    public double getFeb() {
         return feb;
     }
 
-    public void setFeb(String feb) {
+    public void setFeb(double feb) {
         this.feb = feb;
     }
 
-    public String getMar() {
+    public double getMar() {
         return mar;
     }
 
-    public void setMar(String mar) {
+    public void setMar(double mar) {
         this.mar = mar;
     }
 
-    public String getApr() {
+    public double getApr() {
         return apr;
     }
 
-    public void setApr(String apr) {
+    public void setApr(double apr) {
         this.apr = apr;
     }
 
-    public String getMay() {
+    public double getMay() {
         return may;
     }
 
-    public void setMay(String may) {
+    public void setMay(double may) {
         this.may = may;
     }
 
-    public String getJun() {
+    public double getJun() {
         return jun;
     }
 
-    public void setJun(String jun) {
+    public void setJun(double jun) {
         this.jun = jun;
     }
 
-    public String getJul() {
+    public double getJul() {
         return jul;
     }
 
-    public void setJul(String jul) {
+    public void setJul(double jul) {
         this.jul = jul;
     }
 
-    public String getAug() {
+    public double getAug() {
         return aug;
     }
 
-    public void setAug(String aug) {
+    public void setAug(double aug) {
         this.aug = aug;
     }
 
-    public String getSep() {
+    public double getSep() {
         return sep;
     }
 
-    public void setSep(String sep) {
+    public void setSep(double sep) {
         this.sep = sep;
     }
 
-    public String getOct() {
+    public double getOct() {
         return oct;
     }
 
-    public void setOct(String oct) {
+    public void setOct(double oct) {
         this.oct = oct;
     }
 
-    public String getNov() {
+    public double getNov() {
         return nov;
     }
 
-    public void setNov(String nov) {
+    public void setNov(double nov) {
         this.nov = nov;
     }
 
-    public String getDec() {
+    public double getDec() {
         return dec;
     }
 
-    public void setDec(String dec) {
+    public void setDec(double dec) {
         this.dec = dec;
+    }
+
+    @Override
+    public String toString() {
+        return "DBEntry{" +
+                "app_id=" + app_id +
+                ", id=" + id +
+                ", state='" + state + '\'' +
+                ", from_year=" + from_year +
+                ", to_year=" + to_year +
+                ", tax_type='" + tax_type + '\'' +
+                ", filing_frequency='" + filing_frequency + '\'' +
+                ", jan=" + jan +
+                ", feb=" + feb +
+                ", mar=" + mar +
+                ", apr=" + apr +
+                ", may=" + may +
+                ", jun=" + jun +
+                ", jul=" + jul +
+                ", aug=" + aug +
+                ", sep=" + sep +
+                ", oct=" + oct +
+                ", nov=" + nov +
+                ", dec=" + dec +
+                '}';
     }
 }
