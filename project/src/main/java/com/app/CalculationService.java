@@ -30,8 +30,8 @@ public class CalculationService {
     public Map<String, Double> getSumAvgFinancialYear(Request request) {
         double sum = 0.0;
         double avg = 0.0;
-        String fm = request.getFm(), tm = request.getTm();
-        int fy = request.getFy(), ty = request.getTy();
+        String fm = request.getFrom_month(), tm = request.getTo_month();
+        int fy = request.getFrom_year(), ty = request.getTo_year();
         UUID app_id = request.getApp_id();
         boolean flag = checkFinancialYear(fm, tm, fy, ty);
         try {

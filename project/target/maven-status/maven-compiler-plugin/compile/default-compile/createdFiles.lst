@@ -5,7 +5,6 @@ com/cf/public_/Keys$ForeignKeys0.class
 com/cf/public_/Keys.class
 com/app/enums/EnumIdInterface.class
 com/cf/public_/Public.class
-com/app/FilingsPojo.class
 com/cf/public_/tables/records/UniRecord.class
 com/cf/public_/Tables.class
 com/cf/public_/tables/Filings.class
@@ -13,6 +12,7 @@ com/cf/public_/Sequences.class
 com/cf/public_/tables/records/TaxRecord.class
 com/cf/public_/tables/Tax.class
 com/cf/public_/tables/Qs.class
+com/app/DBEntry.class
 com/app/MyController.class
 com/cf/public_/Keys$UniqueKeys0.class
 com/app/CalculationService.class
