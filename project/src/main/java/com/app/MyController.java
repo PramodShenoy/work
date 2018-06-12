@@ -26,11 +26,12 @@ public class MyController {
 
     @Autowired
     private DataSource dataSource;
+    private DSLContext dslContext;
+
     private int count = 0;
 
     @RequestMapping(value = "/get")
     public ResponseEntity<String> get() {
-        DSLContext dslContext;
         int fy = 2015;
         int ty = 2019;
         String fm = "may";
@@ -43,35 +44,7 @@ public class MyController {
             boolean flag = checkFinancialYear(fm, tm, fy, ty);
             dslContext = DSL.using(dataSource.getConnection());
             if (!flag) {
-                Result<?> result;
-                if (!checkInJanFebMar(fm)) {
-                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                            .fetch();
-                    fy++;
-                }
-                else
-                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                            .fetch();
-                sum += getSumFromTo(fm, result, "mar");
-                fm = "apr";
-                log.info("FIRST FY COUNT " + count);
-                if (checkInJanFebMar(tm))
-                    ty--;
-                while (fy < ty) {
-                    result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                            where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                            .fetch();
-                    sum += getSumFromTo(fm, result, "mar");
-                    fy++;
-                    log.info("LOOP COUNT " + count);
-                }
-                log.info("FY IS " + fy);
-                result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                        where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
-                        .fetch();
-                sum += getSumFromTo(fm, result, tm);
+                sum+=getSumRangeFinancialYear(fm,fy,tm,ty,app_id);
                 log.info(Double.toString(sum));
                 log.info("FINAL COUNT " + count);
             } else {
@@ -98,6 +71,40 @@ public class MyController {
         return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
+    public double getSumRangeFinancialYear(String fm,int fy,String tm,int ty,UUID app_id)
+    {
+        double sum=0.0;
+        Result<?> result;
+        if (!checkInJanFebMar(fm)) {
+            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    .fetch();
+            fy++;
+        }
+        else
+            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                    where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    .fetch();
+        sum += getSumFromTo(fm, result, "mar");
+        fm = "apr";
+        log.info("FIRST FY COUNT " + count);
+        if (checkInJanFebMar(tm))
+            ty--;
+        while (fy < ty) {
+            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    .fetch();
+            sum += getSumFromTo(fm, result, "mar");
+            fy++;
+            log.info("LOOP COUNT " + count);
+        }
+        log.info("FY IS " + fy);
+        result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                .fetch();
+        sum += getSumFromTo(fm, result, tm);
+        return sum;
+    }
     public double getSumFromTo(String fm, Result<?> result, String tm) {
         double sum = 0.0;
         int startIndex = MonthEnum.valueOf(fm).id();
