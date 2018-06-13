@@ -14,7 +14,7 @@ import static com.cf.public_.Tables.FILINGS;
 
 @Component
 @Slf4j
-public class UpdateService {
+public class UpdateDataService {
     @Autowired
     private DataSource dataSource;
     private DSLContext dslContext;

@@ -19,7 +19,7 @@ public class MyController {
     @Autowired
     private InsertDataService insertDataService;
     @Autowired
-    private UpdateService updateService;
+    private UpdateDataService updateDataService;
     @Autowired
     private DeleteDataService deleteDataService;
     @Autowired
@@ -45,7 +45,7 @@ public class MyController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<String> update(@RequestBody DBEntry dbEntry) {
-        if (updateService.updateFilingsData(dbEntry) == 0)
+        if (updateDataService.updateFilingsData(dbEntry) == 0)
             return new ResponseEntity<>("UPDATE DONE", HttpStatus.OK);
         return new ResponseEntity<>("ERROR IN FINDING ROW", HttpStatus.OK);
     }
