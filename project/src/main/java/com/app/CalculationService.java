@@ -30,22 +30,26 @@ public class CalculationService {
     public Map<String, Double> getSumAvgFinancialYear(Request request) {
         double sum = 0.0;
         double avg = 0.0;
-        String fm = request.getFrom_month(), tm = request.getTo_month();
-        int fy = request.getFrom_year(), ty = request.getTo_year();
+        String fromMonth = request.getFrom_month(), toMonth
+                = request.getTo_month();
+        int fromYear = request.getFrom_year(), toYear = request.getTo_year();
         UUID app_id = request.getApp_id();
-        boolean flag = checkFinancialYear(fm, tm, fy, ty);
+        boolean flag = checkFinancialYear(fromMonth, toMonth
+                , fromYear, toYear);
         try {
             dslContext = DSL.using(dataSource.getConnection());
             if (!flag) {
                 log.info("RANGE FINANCIAL YEAR");
-                sum += getSumRangeFinancialYear(fm, fy, tm, ty, app_id);
+                sum += getSumRangeFinancialYear(fromMonth, fromYear, toMonth
+                        , toYear, app_id);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
                 log.info("FINAL COUNT " + count);
             } else {
                 log.info("SAME FINANCIAL YEAR");
-                sum += getSumSameFinancialYear(fm, fy, tm, ty, app_id);
+                sum += getSumSameFinancialYear(fromMonth, fromYear, toMonth
+                        , toYear, app_id);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
@@ -61,58 +65,65 @@ public class CalculationService {
         return resultMap;
     }
 
-    private double getSumSameFinancialYear(String fm, int fy, String tm, int ty, UUID app_id) {
+    private double getSumSameFinancialYear(String fromMonth, int fromYear, String toMonth
+            , int toYear, UUID app_id) {
         Result<?> result;
-        if (checkInJanFebMar(fm))
+        if (checkInJanFebMar(fromMonth))
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    where(TAX.TO_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
         else
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
         double sum = 0.0;
-        sum += getSumFromTo(fm, result, tm);
+        sum += getSumFromTo(fromMonth, result, toMonth
+        );
         return sum;
     }
 
-    private double getSumRangeFinancialYear(String fm, int fy, String tm, int ty, UUID app_id) {
+    private double getSumRangeFinancialYear(String fromMonth, int fromYear, String toMonth
+            , int toYear, UUID app_id) {
         double sum = 0.0;
         Result<?> result;
-        if (!checkInJanFebMar(fm)) {
+        if (!checkInJanFebMar(fromMonth)) {
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
-            fy++;
+            fromYear++;
         } else
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.TO_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    where(TAX.TO_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
-        sum += getSumFromTo(fm, result, "mar");
-        fm = "apr";
+        sum += getSumFromTo(fromMonth, result, "mar");
+        fromMonth = "apr";
         log.info("FIRST FY COUNT " + count);
-        if (checkInJanFebMar(tm))
-            ty--;
-        while (fy < ty) {
+        if (checkInJanFebMar(toMonth
+        ))
+            toYear--;
+        while (fromYear < toYear) {
             result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                     .fetch();
-            sum += getSumFromTo(fm, result, "mar");
-            fy++;
+            sum += getSumFromTo(fromMonth, result, "mar");
+            fromYear++;
             log.info("LOOP COUNT " + count);
         }
-        log.info("FY IS " + fy);
+        log.info("FY IS " + fromYear);
         result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                where(TAX.FROM_YEAR.eq(fy).and(TAX.APP_ID.eq(app_id)))
+                where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
                 .fetch();
-        sum += getSumFromTo(fm, result, tm);
+        sum += getSumFromTo(fromMonth, result, toMonth
+        );
         return sum;
     }
 
-    private double getSumFromTo(String fm, Result<?> result, String tm) {
+    private double getSumFromTo(String fromMonth, Result<?> result, String toMonth
+    ) {
         double sum = 0.0;
-        int startIndex = MonthEnum.valueOf(fm).id();
-        int endIndex = MonthEnum.valueOf(tm).id();
+        int startIndex = MonthEnum.valueOf(fromMonth).id();
+        int endIndex = MonthEnum.valueOf(toMonth
+        ).id();
         for (Record rowResult : result) {
             try {
                 int i = startIndex;
@@ -139,10 +150,13 @@ public class CalculationService {
         return true;
     }
 
-    private boolean checkFinancialYear(String fm, String tm, int fy, int ty) {
-        if ((!checkInJanFebMar(fm) && fy == ty) ||
-                (!checkInJanFebMar(fm) && checkInJanFebMar(tm) && fy + 1 == ty) ||
-                (checkInJanFebMar(fm) && checkInJanFebMar(tm) && fy == ty))
+    private boolean checkFinancialYear(String fromMonth, String toMonth
+            , int fromYear, int toYear) {
+        if ((!checkInJanFebMar(fromMonth) && fromYear == toYear) ||
+                (!checkInJanFebMar(fromMonth) && checkInJanFebMar(toMonth
+                ) && fromYear + 1 == toYear) ||
+                (checkInJanFebMar(fromMonth) && checkInJanFebMar(toMonth
+                ) && fromYear == toYear))
             return true;
         return false;
     }
