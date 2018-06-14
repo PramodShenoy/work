@@ -11,6 +11,7 @@ public class Request {
     private String to_month;
     private int from_year;
     private int to_year;
+    private String state;
 
     public Request() {
 
@@ -24,7 +25,16 @@ public class Request {
                 ", to_month='" + to_month + '\'' +
                 ", from_year=" + from_year +
                 ", to_year=" + to_year +
+                ", state='" + state + '\'' +
                 '}';
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public UUID getApp_id() {

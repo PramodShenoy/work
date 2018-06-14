@@ -6,9 +6,9 @@ import java.util.Map;
 
 public enum FilingFrequencyEnum {
 
-    MONTHLY(1, "MONTHLY"),
-    QUARTERLY(2, "QUARTERLY"),
-    HALFYEARLY(3, "HALFYEARLY");
+    MONTHLY(10, "MONTHLY"),
+    QUARTERLY(20, "QUARTERLY"),
+    HALFYEARLY(30, "HALFYEARLY");
 
     private static final Map<Integer, FilingFrequencyEnum> lookup = new HashMap<>();
 

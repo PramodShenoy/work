@@ -14,6 +14,7 @@ com/cf/public_/tables/Qs.class
 com/app/UpdateDataService.class
 com/cf/public_/Keys$UniqueKeys0.class
 com/cf/public_/tables/records/QsRecord.class
+com/app/TaxRepository.class
 com/app/enums/MonthEnum.class
 com/cf/DefaultCatalog.class
 com/app/DeleteDataService.class
