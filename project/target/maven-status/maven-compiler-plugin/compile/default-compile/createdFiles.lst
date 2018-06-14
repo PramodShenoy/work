@@ -1,5 +1,3 @@
-com/app/InsertDataService.class
-com/app/QueryService.class
 com/app/Request.class
 com/cf/public_/Keys$Identities0.class
 com/app/enums/FilingFrequencyEnum.class
@@ -11,13 +9,11 @@ com/cf/public_/Tables.class
 com/cf/public_/Sequences.class
 com/cf/public_/tables/records/TaxRecord.class
 com/cf/public_/tables/Qs.class
-com/app/UpdateDataService.class
 com/cf/public_/Keys$UniqueKeys0.class
 com/cf/public_/tables/records/QsRecord.class
 com/app/TaxRepository.class
 com/app/enums/MonthEnum.class
 com/cf/DefaultCatalog.class
-com/app/DeleteDataService.class
 com/cf/public_/tables/Uni.class
 com/app/enums/TaxTypeEnum.class
 com/app/enums/EnumIdInterface.class

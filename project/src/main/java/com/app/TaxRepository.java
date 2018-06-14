@@ -144,4 +144,18 @@ public class TaxRepository {
                     .where(TAX.APP_ID.eq(appId))
                     .fetch().into(DBEntry.class);
     }
+
+    public Result<?> getJoinFromYear(int fromYear, UUID appId) {
+        init();
+        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(appId)))
+                .fetch();
+    }
+
+    public Result<?> getJoinToYear(int toYear, UUID appId) {
+        init();
+        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
+                where(TAX.TO_YEAR.eq(toYear).and(TAX.APP_ID.eq(appId)))
+                .fetch();
+    }
 }

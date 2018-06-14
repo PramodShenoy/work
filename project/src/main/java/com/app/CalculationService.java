@@ -2,28 +2,21 @@ package com.app;
 
 import com.app.enums.MonthEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import static com.cf.public_.Tables.FILINGS;
-import static com.cf.public_.Tables.TAX;
 
 @Component
 @Slf4j
 public class CalculationService {
 
     @Autowired
-    private DataSource dataSource;
-    private DSLContext dslContext;
+    private TaxRepository taxRepository;
     private int count = 0;
 
 
@@ -33,15 +26,14 @@ public class CalculationService {
         String fromMonth = request.getFrom_month(), toMonth
                 = request.getTo_month();
         int fromYear = request.getFrom_year(), toYear = request.getTo_year();
-        UUID app_id = request.getApp_id();
+        UUID appId = request.getApp_id();
         boolean flag = checkFinancialYear(fromMonth, toMonth
                 , fromYear, toYear);
         try {
-            dslContext = DSL.using(dataSource.getConnection());
             if (!flag) {
                 log.info("RANGE FINANCIAL YEAR");
                 sum += getSumRangeFinancialYear(fromMonth, fromYear, toMonth
-                        , toYear, app_id);
+                        , toYear, appId);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
@@ -49,7 +41,7 @@ public class CalculationService {
             } else {
                 log.info("SAME FINANCIAL YEAR");
                 sum += getSumSameFinancialYear(fromMonth, fromYear, toMonth
-                        , toYear, app_id);
+                        , toYear, appId);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
@@ -66,16 +58,12 @@ public class CalculationService {
     }
 
     private double getSumSameFinancialYear(String fromMonth, int fromYear, String toMonth
-            , int toYear, UUID app_id) {
+            , int toYear, UUID appId) {
         Result<?> result;
         if (checkInJanFebMar(fromMonth))
-            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.TO_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                    .fetch();
+            result = taxRepository.getJoinToYear(fromYear, appId);
         else
-            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                    .fetch();
+            result = taxRepository.getJoinFromYear(fromYear, appId);
         double sum = 0.0;
         sum += getSumFromTo(fromMonth, result, toMonth
         );
@@ -83,18 +71,14 @@ public class CalculationService {
     }
 
     private double getSumRangeFinancialYear(String fromMonth, int fromYear, String toMonth
-            , int toYear, UUID app_id) {
+            , int toYear, UUID appId) {
         double sum = 0.0;
         Result<?> result;
         if (!checkInJanFebMar(fromMonth)) {
-            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                    .fetch();
+            result = taxRepository.getJoinFromYear(fromYear, appId);
             fromYear++;
         } else
-            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.TO_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                    .fetch();
+            result = taxRepository.getJoinToYear(fromYear, appId);
         sum += getSumFromTo(fromMonth, result, "mar");
         fromMonth = "apr";
         log.info("FIRST FY COUNT " + count);
@@ -102,17 +86,13 @@ public class CalculationService {
         ))
             toYear--;
         while (fromYear < toYear) {
-            result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                    where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                    .fetch();
+            result = taxRepository.getJoinFromYear(fromYear, appId);
             sum += getSumFromTo(fromMonth, result, "mar");
             fromYear++;
             log.info("LOOP COUNT " + count);
         }
         log.info("FY IS " + fromYear);
-        result = dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(app_id)))
-                .fetch();
+        result = taxRepository.getJoinFromYear(fromYear, appId);
         sum += getSumFromTo(fromMonth, result, toMonth
         );
         return sum;

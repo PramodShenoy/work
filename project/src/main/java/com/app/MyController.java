@@ -42,13 +42,13 @@ public class MyController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<String> update(@RequestBody DBEntry dbEntry) {
         taxRepository.update(dbEntry);
-        return new ResponseEntity<>("DONE",HttpStatus.OK);
+        return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<String> delete(@RequestBody DBEntry dbEntry) {
         taxRepository.delete(dbEntry);
-        return new ResponseEntity<>("DONE",HttpStatus.OK);
+        return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/query/request", method = RequestMethod.POST)
