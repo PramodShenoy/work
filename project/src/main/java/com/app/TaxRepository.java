@@ -29,21 +29,13 @@ public class TaxRepository {
     @Autowired
     private DSLContext dslContext;
 
-    private void init() {
+    public void init() {
         try {
             dslContext = DSL.using(dataSource.getConnection());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("ERROR IN INITIALISING DSL CONTEXT" + e);
         }
-    }
-
-    public Result<?> searchId(DBEntry dbEntry) {
-        init();
-        return dslContext.select(TAX.ID)
-                .from(TAX)
-                .where(TAX.ID.eq(dbEntry.getId()))
-                .fetch();
     }
 
     public void insertData(DBEntry dbEntry) {
