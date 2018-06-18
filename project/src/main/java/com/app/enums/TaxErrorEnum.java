@@ -4,28 +4,29 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TaxTypeEnum implements EnumIdInterface{
+public enum  TaxErrorEnum implements EnumIdInterface{
 
-    VAT(10, "VAT"),
-    ST(20, "ST"),
-    CST(30, "CST");
+    SUCCESS(0,"SUCCESS"),
+    INSERT_ERROR(10, "ERORR IN INSERTING"),
+    UPDATE_ERROR(20, "ERROR IN UPDATING"),
+    DELETE_ERROR(30, "ERROR IN DELETING");
 
-    private static final Map<Integer, TaxTypeEnum> lookup = new HashMap<>();
+    private static final Map<Integer, TaxErrorEnum> lookup = new HashMap<>();
 
     static {
-        for (TaxTypeEnum s : EnumSet.allOf(TaxTypeEnum.class))
+        for (TaxErrorEnum s : EnumSet.allOf(TaxErrorEnum.class))
             lookup.put(s.id(), s);
     }
 
     private int id;
     private String label;
 
-    TaxTypeEnum(int k, String s) {
+    TaxErrorEnum(int k, String s) {
         id = k;
         label = s;
     }
 
-    public static TaxTypeEnum from(int id) throws Exception {
+    public static TaxErrorEnum from(int id) throws Exception {
         if (lookup.get(id) == null) throw new Exception("invalid MonthEnum value");
         return lookup.get(id);
     }

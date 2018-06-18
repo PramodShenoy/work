@@ -4,6 +4,7 @@ com/cf/public_/Keys$ForeignKeys0.class
 com/cf/public_/Keys.class
 com/cf/public_/Public.class
 com/cf/public_/tables/records/UniRecord.class
+com/app/enums/TaxErrorEnum.class
 com/cf/public_/Tables.class
 com/cf/public_/Sequences.class
 com/cf/public_/tables/records/TaxRecord.class
@@ -18,6 +19,7 @@ com/app/Repository.class
 com/cf/DefaultCatalog.class
 com/cf/public_/tables/Uni.class
 com/app/enums/TaxTypeEnum.class
+com/app/TaxRepository$1.class
 com/app/enums/EnumIdInterface.class
 com/cf/public_/tables/Filings.class
 com/app/QueryRequest.class

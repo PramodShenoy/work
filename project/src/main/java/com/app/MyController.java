@@ -1,6 +1,7 @@
 package com.app;
 
 
+import com.app.enums.TaxErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,27 +35,21 @@ public class MyController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseEntity<String> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
-        taxRepository.insertTaxFilingRecord(taxFilingRecord);
-        /*if(taxRepository.getErrorCode()==0)
-            return new ResponseEntity<>("INSERTED", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = taxRepository.insertTaxFilingRecord(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/updateTaxFilingRecord", method = RequestMethod.POST)
-    public ResponseEntity<String> update(@RequestBody TaxFilingRecord taxFilingRecord) {
-        taxRepository.updateTaxFilingRecord(taxFilingRecord);
-      /*  if (taxRepository.getErrorCode()==0)
-            return new ResponseEntity<>("DONE", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> update(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = taxRepository.updateTaxFilingRecord(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/deleteTaxFilingRecord", method = RequestMethod.POST)
-    public ResponseEntity<String> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
-        taxRepository.deleteTaxFilingRecord(taxFilingRecord);
-        /*if(taxRepository.getErrorCode()==0)
-            return new ResponseEntity<>("DONE", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = taxRepository.deleteTaxFilingRecord(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
