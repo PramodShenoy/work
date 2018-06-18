@@ -25,10 +25,10 @@ public class CalculationService {
     public Map<String, Double> getSumAvgFinancialYear(QueryRequest queryRequest) {
         double sum = 0.0;
         double avg = 0.0;
-        String fromMonth = queryRequest.getFrom_month(), toMonth
-                = queryRequest.getTo_month();
-        int fromYear = queryRequest.getFrom_year(), toYear = queryRequest.getTo_year();
-        UUID appId = queryRequest.getApp_id();
+        String fromMonth = queryRequest.getFromMonth(), toMonth
+                = queryRequest.getToMonth();
+        int fromYear = queryRequest.getFromYear(), toYear = queryRequest.getToYear();
+        UUID appId = queryRequest.getAppId();
         boolean flag = checkFinancialYear(fromMonth, toMonth, fromYear, toYear);
         try {
             if (!flag) {

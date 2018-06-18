@@ -12,6 +12,7 @@ com/cf/public_/Keys$UniqueKeys0.class
 com/cf/public_/tables/records/QsRecord.class
 com/app/TaxRepository.class
 com/app/enums/MonthEnum.class
+com/app/DSLContextBean.class
 com/app/Repository.class
 com/cf/DefaultCatalog.class
 com/cf/public_/tables/Uni.class
@@ -23,7 +24,6 @@ com/cf/public_/tables/Tax.class
 com/app/DBEntry.class
 com/app/MyController.class
 com/app/CalculationService.class
-com/app/MyController2.class
 com/cf/public_/tables/records/FilingsRecord.class
 com/app/Application.class
 com/app/TaxSpecification.class

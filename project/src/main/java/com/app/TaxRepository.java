@@ -29,20 +29,7 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
     @Autowired
     private DSLContext dslContext;
 
-    private int errorCode;
-
-    private void init() {
-        try {
-            dslContext = DSL.using(dataSource.getConnection());
-            errorCode = 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("ERROR IN INITIALISING DSL CONTEXT" + e);
-        }
-    }
-
     public void insertData(DBEntry dbEntry) {
-        init();
         try {
             dslContext.transaction(configuration -> {
                 int id = dslContext.insertInto(TAX, TAX.APP_ID, TAX.STATE, TAX.FROM_YEAR, TAX.TO_YEAR, TAX.TAX_TYPE, TAX.FILING_FREQENCY)
@@ -62,12 +49,10 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
         } catch (DataAccessException d) {
             d.printStackTrace();
             log.error("ROLLING BACK TRANSACTION");
-            errorCode = 1;
         }
     }
 
     public void delete(DBEntry dbEntry) {
-        init();
         dslContext.transaction(configuration -> {
             TaxRecord taxRecord = dslContext.selectFrom(TAX).where(TAX.ID.eq(dbEntry.getId())).fetchOne();
             if (taxRecord != null)
@@ -76,7 +61,6 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
     }
 
     public void update(DBEntry dbEntry) {
-        //init();
         try {
             /*dslContext.transaction(configuration -> {
                 FilingsRecord filingsRecord = dslContext.selectFrom(FILINGS).where(FILINGS.ID.eq(dbEntry.getId())).fetchOne();
@@ -96,8 +80,8 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
                     filingsRecord.store();
                 }
             });*/
-            DSL.using(dataSource.getConnection()).transaction(configuration -> {
-                FilingsRecord filingsRecord = DSL.using(dataSource.getConnection())
+            dslContext.transaction(configuration -> {
+                FilingsRecord filingsRecord = dslContext
                         .selectFrom(FILINGS).where(FILINGS.ID.eq(dbEntry.getId())).fetchOne();
                 if (filingsRecord != null) {
                     filingsRecord.setJan(BigDecimal.valueOf(dbEntry.getJan()));
@@ -118,28 +102,14 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
             });
         } catch (Exception e) {
             log.error("ERROR IN UPDATING" + e);
-            errorCode = 3;
         }
     }
 
     public List<DBEntry> query(QueryRequest queryRequest) {
-        init();
-        UUID appId = queryRequest.getApp_id();
-        int fromYear = queryRequest.getFrom_year();
-        int toYear = queryRequest.getTo_year();
+        UUID appId = queryRequest.getAppId();
+        int fromYear = queryRequest.getFromYear();
+        int toYear = queryRequest.getToYear();
         String state = queryRequest.getState();
-        /*if (fromYear != 0 && toYear != 0 && queryRequest.getState()==null)
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId).and(TAX.FROM_YEAR.eq(fromYear)).and(TAX.TO_YEAR.eq(toYear)))
-                    .fetch().into(DBEntry.class);
-        else if (queryRequest.getState()!=null)
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId).and(TAX.STATE.equalIgnoreCase(state)))
-                    .fetch().into(DBEntry.class);
-        else
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId))
-                    .fetch().into(DBEntry.class);*/
         if (stateSpecified(queryRequest))
             return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
                     .where(TAX.APP_ID.eq(appId).and(TAX.STATE.equalIgnoreCase(state)))
@@ -156,21 +126,15 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
     }
 
     public Result<?> getJoinFromYear(int fromYear, UUID appId) {
-        init();
         return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
                 .where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(appId)))
                 .fetch();
     }
 
     public Result<?> getJoinToYear(int toYear, UUID appId) {
-        init();
         return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
                 .where(TAX.TO_YEAR.eq(toYear).and(TAX.APP_ID.eq(appId)))
                 .fetch();
-    }
-
-    public int getErrorCode() {
-        return errorCode;
     }
 
     @Override
@@ -180,6 +144,6 @@ public class TaxRepository implements com.app.Repository<DBEntry>, TaxSpecificat
 
     @Override
     public boolean yearSpecified(QueryRequest obj) {
-        return obj.getFrom_year()!=0 && obj.getTo_year()!=0;
+        return obj.getFromYear()!=0 && obj.getToYear()!=0;
     }
 }

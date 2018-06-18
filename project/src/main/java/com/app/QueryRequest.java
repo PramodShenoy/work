@@ -6,11 +6,11 @@ import java.util.UUID;
 
 @Component
 public class QueryRequest {
-    private UUID app_id;
-    private String from_month;
-    private String to_month;
-    private int from_year;
-    private int to_year;
+    private UUID appId;
+    private String fromMonth;
+    private String toMonth;
+    private int fromYear;
+    private int toYear;
     private String state;
 
     public QueryRequest() {
@@ -20,11 +20,11 @@ public class QueryRequest {
     @Override
     public String toString() {
         return "QueryRequest{" +
-                "app_id=" + app_id +
-                ", from_month='" + from_month + '\'' +
-                ", to_month='" + to_month + '\'' +
-                ", from_year=" + from_year +
-                ", to_year=" + to_year +
+                "appId=" + appId +
+                ", fromMonth='" + fromMonth + '\'' +
+                ", toMonth='" + toMonth + '\'' +
+                ", fromYear=" + fromYear +
+                ", toYear=" + toYear +
                 ", state='" + state + '\'' +
                 '}';
     }
@@ -37,43 +37,43 @@ public class QueryRequest {
         this.state = state;
     }
 
-    public UUID getApp_id() {
-        return app_id;
+    public UUID getAppId() {
+        return appId;
     }
 
-    public void setApp_id(UUID app_id) {
-        this.app_id = app_id;
+    public void setAppId(UUID appId) {
+        this.appId = appId;
     }
 
-    public String getFrom_month() {
-        return from_month;
+    public String getFromMonth() {
+        return fromMonth;
     }
 
-    public void setFrom_month(String from_month) {
-        this.from_month = from_month;
+    public void setFromMonth(String fromMonth) {
+        this.fromMonth = fromMonth;
     }
 
-    public String getTo_month() {
-        return to_month;
+    public String getToMonth() {
+        return toMonth;
     }
 
-    public void setTo_month(String to_month) {
-        this.to_month = to_month;
+    public void setToMonth(String toMonth) {
+        this.toMonth = toMonth;
     }
 
-    public int getFrom_year() {
-        return from_year;
+    public int getFromYear() {
+        return fromYear;
     }
 
-    public void setFrom_year(int from_year) {
-        this.from_year = from_year;
+    public void setFromYear(int fromYear) {
+        this.fromYear = fromYear;
     }
 
-    public int getTo_year() {
-        return to_year;
+    public int getToYear() {
+        return toYear;
     }
 
-    public void setTo_year(int to_year) {
-        this.to_year = to_year;
+    public void setToYear(int toYear) {
+        this.toYear = toYear;
     }
 }
