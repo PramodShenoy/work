@@ -56,13 +56,10 @@ public class MyController {
             return new ResponseEntity<>("DONE", HttpStatus.OK);
         return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
-
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     public ResponseEntity<List<DBEntry>> search(@RequestBody QueryRequest queryRequest) {
         log.info(queryRequest.toString());
         List<DBEntry> dbEntry = taxRepository.query(queryRequest);
         return new ResponseEntity<>(dbEntry, HttpStatus.OK);
     }
-
-
 }
