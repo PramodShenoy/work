@@ -16,6 +16,7 @@ com/app/Repository.class
 com/cf/DefaultCatalog.class
 com/cf/public_/tables/Uni.class
 com/app/enums/TaxTypeEnum.class
+com/TaxSpecification.class
 com/app/enums/EnumIdInterface.class
 com/cf/public_/tables/Filings.class
 com/app/QueryRequest.class

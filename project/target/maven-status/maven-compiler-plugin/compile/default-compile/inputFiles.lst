@@ -11,12 +11,13 @@
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/Qs.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/QsRecord.java
 /home/pramod/Desktop/work/project/src/main/java/com/app/MyController.java
-/home/pramod/Desktop/work/project/src/main/java/com/app/Request.java
+/home/pramod/Desktop/work/project/src/main/java/com/app/QueryRequest.java
 /home/pramod/Desktop/work/project/src/main/java/com/app/Application.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/Public.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/TaxRecord.java
 /home/pramod/Desktop/work/project/src/main/java/com/app/enums/MonthEnum.java
 /home/pramod/Desktop/work/project/src/main/java/com/app/enums/EnumIdInterface.java
+/home/pramod/Desktop/work/project/src/main/java/com/app/Repository.java
 /home/pramod/Desktop/work/project/src/main/java/com/app/TaxRepository.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/Keys.java
 /home/pramod/Desktop/work/project/src/main/java/com/cf/public_/tables/records/UniRecord.java
