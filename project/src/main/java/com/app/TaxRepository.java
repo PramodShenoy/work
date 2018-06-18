@@ -22,16 +22,19 @@ import static com.cf.public_.Tables.TAX;
 
 @Repository
 @Slf4j
-public class TaxRepository {
+public class TaxRepository implements com.app.Repository<DBEntry> {
 
     @Autowired
     private DataSource dataSource;
     @Autowired
     private DSLContext dslContext;
 
+    private int errorCode;
+
     public void init() {
         try {
             dslContext = DSL.using(dataSource.getConnection());
+            errorCode = 0;
         } catch (Exception e) {
             e.printStackTrace();
             log.error("ERROR IN INITIALISING DSL CONTEXT" + e);
@@ -59,6 +62,7 @@ public class TaxRepository {
         } catch (DataAccessException d) {
             d.printStackTrace();
             log.error("ROLLING BACK TRANSACTION");
+            errorCode = 1;
         }
     }
 
@@ -114,20 +118,21 @@ public class TaxRepository {
             });
         } catch (Exception e) {
             log.error("ERROR IN UPDATING" + e);
+            errorCode = 3;
         }
     }
 
-    public List<DBEntry> query(Request request) {
+    public List<DBEntry> query(QueryRequest queryRequest) {
         init();
-        UUID appId = request.getApp_id();
-        int fromYear = request.getFrom_year();
-        int toYear = request.getTo_year();
-        String state = request.getState();
-        if (fromYear != 0 && toYear != 0 && state.equalsIgnoreCase(""))
+        UUID appId = queryRequest.getApp_id();
+        int fromYear = queryRequest.getFrom_year();
+        int toYear = queryRequest.getTo_year();
+        String state = queryRequest.getState();
+        if (fromYear != 0 && toYear != 0 && queryRequest.getState()==null)
             return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
                     .where(TAX.APP_ID.eq(appId).and(TAX.FROM_YEAR.eq(fromYear)).and(TAX.TO_YEAR.eq(toYear)))
                     .fetch().into(DBEntry.class);
-        else if (!state.equalsIgnoreCase(""))
+        else if (queryRequest.getState()!=null)
             return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
                     .where(TAX.APP_ID.eq(appId).and(TAX.STATE.equalIgnoreCase(state)))
                     .fetch().into(DBEntry.class);
@@ -139,15 +144,19 @@ public class TaxRepository {
 
     public Result<?> getJoinFromYear(int fromYear, UUID appId) {
         init();
-        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(appId)))
+        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
+                .where(TAX.FROM_YEAR.eq(fromYear).and(TAX.APP_ID.eq(appId)))
                 .fetch();
     }
 
     public Result<?> getJoinToYear(int toYear, UUID appId) {
         init();
-        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID))).
-                where(TAX.TO_YEAR.eq(toYear).and(TAX.APP_ID.eq(appId)))
+        return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
+                .where(TAX.TO_YEAR.eq(toYear).and(TAX.APP_ID.eq(appId)))
                 .fetch();
+    }
+
+    public int getErrorCode() {
+        return errorCode;
     }
 }

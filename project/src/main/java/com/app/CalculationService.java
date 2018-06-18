@@ -7,6 +7,8 @@ import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,28 +22,25 @@ public class CalculationService {
     private int count = 0;
 
 
-    public Map<String, Double> getSumAvgFinancialYear(Request request) {
+    public Map<String, Double> getSumAvgFinancialYear(QueryRequest queryRequest) {
         double sum = 0.0;
         double avg = 0.0;
-        String fromMonth = request.getFrom_month(), toMonth
-                = request.getTo_month();
-        int fromYear = request.getFrom_year(), toYear = request.getTo_year();
-        UUID appId = request.getApp_id();
-        boolean flag = checkFinancialYear(fromMonth, toMonth
-                , fromYear, toYear);
+        String fromMonth = queryRequest.getFrom_month(), toMonth
+                = queryRequest.getTo_month();
+        int fromYear = queryRequest.getFrom_year(), toYear = queryRequest.getTo_year();
+        UUID appId = queryRequest.getApp_id();
+        boolean flag = checkFinancialYear(fromMonth, toMonth, fromYear, toYear);
         try {
             if (!flag) {
                 log.info("RANGE FINANCIAL YEAR");
-                sum += getSumRangeFinancialYear(fromMonth, fromYear, toMonth
-                        , toYear, appId);
+                sum += getSumRangeFinancialYear(fromMonth, fromYear, toMonth, toYear, appId);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
                 log.info("FINAL COUNT " + count);
             } else {
                 log.info("SAME FINANCIAL YEAR");
-                sum += getSumSameFinancialYear(fromMonth, fromYear, toMonth
-                        , toYear, appId);
+                sum += getSumSameFinancialYear(fromMonth, fromYear, toMonth, toYear, appId);
                 avg = sum / count;
                 log.info("SUM IS " + sum);
                 log.info("AVG IS " + avg);
@@ -51,8 +50,8 @@ public class CalculationService {
             log.error("SQL EXCEPTION ", e);
         }
         Map<String, Double> resultMap = new HashMap<>();
-        resultMap.put("Sum", sum);
-        resultMap.put("Avg", avg);
+        resultMap.put("Sum", BigDecimal.valueOf(sum).setScale(2,RoundingMode.HALF_UP).doubleValue());
+        resultMap.put("Avg", BigDecimal.valueOf(avg).setScale(2,RoundingMode.HALF_UP).doubleValue());
         count = 0;
         return resultMap;
     }

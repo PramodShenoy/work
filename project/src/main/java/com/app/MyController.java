@@ -23,37 +23,44 @@ public class MyController {
     private TaxRepository taxRepository;
 
     @RequestMapping(value = "/getRange", method = RequestMethod.POST)
-    public ResponseEntity<String> get(@RequestBody Request request) {
-        String fm = request.getFrom_month().toLowerCase().substring(0, 3);
-        String tm = request.getTo_month().toLowerCase().substring(0, 3);
-        request.setFrom_month(fm);
-        request.setTo_month(tm);
-        Map<String, Double> resultMap = calculationService.getSumAvgFinancialYear(request);
+    public ResponseEntity<Map<String,Double>> get(@RequestBody QueryRequest queryRequest) {
+        String fm = queryRequest.getFrom_month().toLowerCase().substring(0, 3);
+        String tm = queryRequest.getTo_month().toLowerCase().substring(0, 3);
+        queryRequest.setFrom_month(fm);
+        queryRequest.setTo_month(tm);
+        Map<String, Double> resultMap = calculationService.getSumAvgFinancialYear(queryRequest);
         log.info(resultMap.toString());
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public ResponseEntity<String> insert(@RequestBody DBEntry dbEntry) {
         taxRepository.insertData(dbEntry);
-        return new ResponseEntity<>("INSERTED", HttpStatus.OK);
+        if(taxRepository.getErrorCode()==0)
+            return new ResponseEntity<>("INSERTED", HttpStatus.OK);
+        return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<String> update(@RequestBody DBEntry dbEntry) {
         taxRepository.update(dbEntry);
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+        if (taxRepository.getErrorCode()==0)
+            return new ResponseEntity<>("DONE", HttpStatus.OK);
+        return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseEntity<String> delete(@RequestBody DBEntry dbEntry) {
         taxRepository.delete(dbEntry);
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+        if(taxRepository.getErrorCode()==0)
+            return new ResponseEntity<>("DONE", HttpStatus.OK);
+        return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/query/request", method = RequestMethod.POST)
-    public ResponseEntity<List<DBEntry>> search(@RequestBody Request request) {
-        List<DBEntry> dbEntry = taxRepository.query(request);
+    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    public ResponseEntity<List<DBEntry>> search(@RequestBody QueryRequest queryRequest) {
+        log.info(queryRequest.toString());
+        List<DBEntry> dbEntry = taxRepository.query(queryRequest);
         return new ResponseEntity<>(dbEntry, HttpStatus.OK);
     }
 

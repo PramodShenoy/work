@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class Request {
+public class QueryRequest {
     private UUID app_id;
     private String from_month;
     private String to_month;
@@ -13,13 +13,13 @@ public class Request {
     private int to_year;
     private String state;
 
-    public Request() {
+    public QueryRequest() {
 
     }
 
     @Override
     public String toString() {
-        return "Request{" +
+        return "QueryRequest{" +
                 "app_id=" + app_id +
                 ", from_month='" + from_month + '\'' +
                 ", to_month='" + to_month + '\'' +
