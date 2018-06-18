@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface Repository<T> {
 
-    void insertData(T data);
+    void insertTaxFilingRecord(T data);
 
-    void delete(T data);
+    void deleteTaxFilingRecord(T data);
 
-    void update(T data);
+    void updateTaxFilingRecord(T data);
 
     List<T> query(QueryRequest queryRequest);
 

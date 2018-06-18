@@ -34,32 +34,32 @@ public class MyController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseEntity<String> insert(@RequestBody DBEntry dbEntry) {
-        taxRepository.insertData(dbEntry);
+    public ResponseEntity<String> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
+        taxRepository.insertTaxFilingRecord(taxFilingRecord);
         /*if(taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("INSERTED", HttpStatus.OK);*/
         return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<String> update(@RequestBody DBEntry dbEntry) {
-        taxRepository.update(dbEntry);
+    @RequestMapping(value = "/updateTaxFilingRecord", method = RequestMethod.POST)
+    public ResponseEntity<String> update(@RequestBody TaxFilingRecord taxFilingRecord) {
+        taxRepository.updateTaxFilingRecord(taxFilingRecord);
       /*  if (taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("DONE", HttpStatus.OK);*/
         return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseEntity<String> delete(@RequestBody DBEntry dbEntry) {
-        taxRepository.delete(dbEntry);
+    @RequestMapping(value = "/deleteTaxFilingRecord", method = RequestMethod.POST)
+    public ResponseEntity<String> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
+        taxRepository.deleteTaxFilingRecord(taxFilingRecord);
         /*if(taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("DONE", HttpStatus.OK);*/
         return new ResponseEntity<>("ERROR",HttpStatus.OK);
     }
     @RequestMapping(value = "/query", method = RequestMethod.POST)
-    public ResponseEntity<List<DBEntry>> search(@RequestBody QueryRequest queryRequest) {
+    public ResponseEntity<List<TaxFilingRecord>> search(@RequestBody QueryRequest queryRequest) {
         log.info(queryRequest.toString());
-        List<DBEntry> dbEntry = taxRepository.query(queryRequest);
-        return new ResponseEntity<>(dbEntry, HttpStatus.OK);
+        List<TaxFilingRecord> taxFilingRecord = taxRepository.query(queryRequest);
+        return new ResponseEntity<>(taxFilingRecord, HttpStatus.OK);
     }
 }
