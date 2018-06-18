@@ -23,7 +23,7 @@ public class MyController {
     private TaxRepository taxRepository;
 
     @RequestMapping(value = "/getRange", method = RequestMethod.POST)
-    public ResponseEntity<Map<String,Double>> get(@RequestBody QueryRequest queryRequest) {
+    public ResponseEntity<Map<String, Double>> get(@RequestBody QueryRequest queryRequest) {
         String fm = queryRequest.getFromMonth().toLowerCase().substring(0, 3);
         String tm = queryRequest.getToMonth().toLowerCase().substring(0, 3);
         queryRequest.setFromMonth(fm);
@@ -38,7 +38,7 @@ public class MyController {
         taxRepository.insertTaxFilingRecord(taxFilingRecord);
         /*if(taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("INSERTED", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR",HttpStatus.OK);
+        return new ResponseEntity<>("ERROR", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/updateTaxFilingRecord", method = RequestMethod.POST)
@@ -46,7 +46,7 @@ public class MyController {
         taxRepository.updateTaxFilingRecord(taxFilingRecord);
       /*  if (taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("DONE", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR",HttpStatus.OK);
+        return new ResponseEntity<>("ERROR", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/deleteTaxFilingRecord", method = RequestMethod.POST)
@@ -54,8 +54,9 @@ public class MyController {
         taxRepository.deleteTaxFilingRecord(taxFilingRecord);
         /*if(taxRepository.getErrorCode()==0)
             return new ResponseEntity<>("DONE", HttpStatus.OK);*/
-        return new ResponseEntity<>("ERROR",HttpStatus.OK);
+        return new ResponseEntity<>("ERROR", HttpStatus.OK);
     }
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     public ResponseEntity<List<TaxFilingRecord>> search(@RequestBody QueryRequest queryRequest) {
         log.info(queryRequest.toString());

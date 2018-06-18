@@ -2,14 +2,13 @@ package com.app;
 
 import com.app.enums.MonthEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -50,21 +49,21 @@ public class CalculationService {
             log.error("SQL EXCEPTION ", e);
         }
         Map<String, Double> resultMap = new HashMap<>();
-        resultMap.put("Sum", BigDecimal.valueOf(sum).setScale(2,RoundingMode.HALF_UP).doubleValue());
-        resultMap.put("Avg", BigDecimal.valueOf(avg).setScale(2,RoundingMode.HALF_UP).doubleValue());
+        resultMap.put("Sum", BigDecimal.valueOf(sum).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        resultMap.put("Avg", BigDecimal.valueOf(avg).setScale(2, RoundingMode.HALF_UP).doubleValue());
         count = 0;
         return resultMap;
     }
 
     private double getSumSameFinancialYear(String fromMonth, int fromYear, String toMonth
             , int toYear, UUID appId) {
-        Result<?> result;
+        List<TaxFilingRecord> taxFilingRecordList;
         if (checkInJanFebMar(fromMonth))
-            result = taxRepository.getJoinToYear(fromYear, appId);
+            taxFilingRecordList = taxRepository.getJoinToYear(fromYear, appId).into(TaxFilingRecord.class);
         else
-            result = taxRepository.getJoinFromYear(fromYear, appId);
+            taxFilingRecordList = taxRepository.getJoinFromYear(fromYear, appId).into(TaxFilingRecord.class);
         double sum = 0.0;
-        sum += getSumFromTo(fromMonth, result, toMonth
+        sum += getSumFromTo(fromMonth, taxFilingRecordList, toMonth
         );
         return sum;
     }
@@ -72,49 +71,45 @@ public class CalculationService {
     private double getSumRangeFinancialYear(String fromMonth, int fromYear, String toMonth
             , int toYear, UUID appId) {
         double sum = 0.0;
-        Result<?> result;
+        List<TaxFilingRecord> taxFilingRecordList;
         if (!checkInJanFebMar(fromMonth)) {
-            result = taxRepository.getJoinFromYear(fromYear, appId);
+            taxFilingRecordList = taxRepository.getJoinFromYear(fromYear, appId).into(TaxFilingRecord.class);
             fromYear++;
         } else
-            result = taxRepository.getJoinToYear(fromYear, appId);
-        sum += getSumFromTo(fromMonth, result, "mar");
+            taxFilingRecordList = taxRepository.getJoinToYear(fromYear, appId).into(TaxFilingRecord.class);
+        sum += getSumFromTo(fromMonth, taxFilingRecordList, "mar");
         fromMonth = "apr";
         log.info("FIRST FY COUNT " + count);
         if (checkInJanFebMar(toMonth
         ))
             toYear--;
         while (fromYear < toYear) {
-            result = taxRepository.getJoinFromYear(fromYear, appId);
-            sum += getSumFromTo(fromMonth, result, "mar");
+            taxFilingRecordList = taxRepository.getJoinFromYear(fromYear, appId).into(TaxFilingRecord.class);
+            sum += getSumFromTo(fromMonth, taxFilingRecordList, "mar");
             fromYear++;
             log.info("LOOP COUNT " + count);
         }
         log.info("FY IS " + fromYear);
-        result = taxRepository.getJoinFromYear(fromYear, appId);
-        sum += getSumFromTo(fromMonth, result, toMonth
+        taxFilingRecordList = taxRepository.getJoinFromYear(fromYear, appId).into(TaxFilingRecord.class);
+        sum += getSumFromTo(fromMonth, taxFilingRecordList, toMonth
         );
         return sum;
     }
 
-    private double getSumFromTo(String fromMonth, Result<?> result, String toMonth
+    private double getSumFromTo(String fromMonth, List<TaxFilingRecord> taxFilingRecordList, String toMonth
     ) {
         double sum = 0.0;
-        int startIndex = MonthEnum.valueOf(fromMonth).id();
-        int endIndex = MonthEnum.valueOf(toMonth
-        ).id();
-        for (Record rowResult : result) {
+        int startIndex = MonthEnum.valueOf(fromMonth).id()-1;
+        int endIndex = MonthEnum.valueOf(toMonth).id()-1;
+        for (TaxFilingRecord rowResult : taxFilingRecordList) {
             try {
                 int i = startIndex;
                 while (i != endIndex) {
-                    String in = MonthEnum.from(i).label();
-                    sum += Double.parseDouble(rowResult.get(in).toString());
+                    sum += rowResult.getFilingValues().get(i).doubleValue();
                     count++;
                     i = (i + 1) % 12;
-                    if (i == 0)
-                        i = 12;
                 }
-                sum += Double.parseDouble(rowResult.get(MonthEnum.from(i).label()).toString());
+                sum += rowResult.getFilingValues().get(i).doubleValue();
                 count++;
             } catch (Exception e) {
                 log.error("ENUM ERROR ", e);

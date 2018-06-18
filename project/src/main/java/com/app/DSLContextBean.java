@@ -11,9 +11,9 @@ import javax.sql.DataSource;
 public class DSLContextBean {
 
     private DSLContext context;
+
     @Bean
-    public DSLContext dslContext(DataSource dataSource) throws Exception
-    {
+    public DSLContext dslContext(DataSource dataSource) throws Exception {
         context = DSL.using(dataSource.getConnection());
         return context;
     }

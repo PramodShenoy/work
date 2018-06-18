@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.GeneratedValue;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -13,30 +15,31 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TaxFilingRecord {
 
-    UUID appId;
+    private UUID appId;
     @GeneratedValue
-    int id;
-    String state;
-    int fromYear;
-    int toYear;
-    String taxType;
-    String filingFrequency;
-    BigDecimal jan;
-    BigDecimal feb;
-    BigDecimal mar;
-    BigDecimal apr;
-    BigDecimal may;
-    BigDecimal jun;
-    BigDecimal jul;
-    BigDecimal aug;
-    BigDecimal sep;
-    BigDecimal oct;
-    BigDecimal nov;
-    BigDecimal dec;
+    private int id;
+    private String state;
+    private int fromYear;
+    private int toYear;
+    private String taxType;
+    private String filingFrequency;
+    private BigDecimal jan;
+    private BigDecimal feb;
+    private BigDecimal mar;
+    private BigDecimal apr;
+    private BigDecimal may;
+    private BigDecimal jun;
+    private BigDecimal jul;
+    private BigDecimal aug;
+    private BigDecimal sep;
+    private BigDecimal oct;
+    private BigDecimal nov;
+    private BigDecimal dec;
+    private List<BigDecimal> filingValues;
 
     public TaxFilingRecord() {
+        filingValues = new ArrayList<>();
     }
-
 
     public UUID getAppId() {
         return appId;
@@ -99,6 +102,7 @@ public class TaxFilingRecord {
     }
 
     public void setJan(BigDecimal jan) {
+        filingValues.add(jan);
         this.jan = jan;
     }
 
@@ -107,6 +111,7 @@ public class TaxFilingRecord {
     }
 
     public void setFeb(BigDecimal feb) {
+        filingValues.add(feb);
         this.feb = feb;
     }
 
@@ -115,6 +120,7 @@ public class TaxFilingRecord {
     }
 
     public void setMar(BigDecimal mar) {
+        filingValues.add(mar);
         this.mar = mar;
     }
 
@@ -123,6 +129,7 @@ public class TaxFilingRecord {
     }
 
     public void setApr(BigDecimal apr) {
+        filingValues.add(apr);
         this.apr = apr;
     }
 
@@ -131,6 +138,7 @@ public class TaxFilingRecord {
     }
 
     public void setMay(BigDecimal may) {
+        filingValues.add(may);
         this.may = may;
     }
 
@@ -139,6 +147,7 @@ public class TaxFilingRecord {
     }
 
     public void setJun(BigDecimal jun) {
+        filingValues.add(jun);
         this.jun = jun;
     }
 
@@ -147,6 +156,7 @@ public class TaxFilingRecord {
     }
 
     public void setJul(BigDecimal jul) {
+        filingValues.add(jul);
         this.jul = jul;
     }
 
@@ -155,6 +165,7 @@ public class TaxFilingRecord {
     }
 
     public void setAug(BigDecimal aug) {
+        filingValues.add(aug);
         this.aug = aug;
     }
 
@@ -163,6 +174,7 @@ public class TaxFilingRecord {
     }
 
     public void setSep(BigDecimal sep) {
+        filingValues.add(sep);
         this.sep = sep;
     }
 
@@ -171,6 +183,7 @@ public class TaxFilingRecord {
     }
 
     public void setOct(BigDecimal oct) {
+        filingValues.add(oct);
         this.oct = oct;
     }
 
@@ -179,6 +192,7 @@ public class TaxFilingRecord {
     }
 
     public void setNov(BigDecimal nov) {
+        filingValues.add(nov);
         this.nov = nov;
     }
 
@@ -187,6 +201,7 @@ public class TaxFilingRecord {
     }
 
     public void setDec(BigDecimal dec) {
+        filingValues.add(dec);
         this.dec = dec;
     }
 
@@ -213,5 +228,9 @@ public class TaxFilingRecord {
                 ", nov=" + nov +
                 ", dec=" + dec +
                 '}';
+    }
+
+    public List<BigDecimal> getFilingValues() {
+        return filingValues;
     }
 }
