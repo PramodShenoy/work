@@ -89,7 +89,7 @@ public class TaxRepository implements TaxSpecificationInterface<QueryRequest>, T
                     .fetch().into(TaxFilingRecord.class);
         else if (yearSpecified(queryRequest))
             return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId).and(TAX.FROM_YEAR.eq(fromYear)).and(TAX.TO_YEAR.eq(toYear)))
+                    .where(TAX.APP_ID.eq(appId).and(TAX.FROM_YEAR.ge(fromYear)).and(TAX.TO_YEAR.le(toYear)))
                     .fetch().into(TaxFilingRecord.class);
         else
             return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
