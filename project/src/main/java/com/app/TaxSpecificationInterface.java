@@ -1,6 +1,6 @@
 package com.app;
 
-public interface TaxSpecification<T> {
+public interface TaxSpecificationInterface<T> {
 
     boolean yearSpecified(T obj);
 

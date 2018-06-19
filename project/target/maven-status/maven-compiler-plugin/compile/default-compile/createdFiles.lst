@@ -2,7 +2,9 @@ com/cf/public_/Keys$Identities0.class
 com/app/enums/FilingFrequencyEnum.class
 com/cf/public_/Keys$ForeignKeys0.class
 com/cf/public_/Keys.class
+com/app/InsertTaxDataService.class
 com/cf/public_/Public.class
+com/app/JooqConfigurationBean.class
 com/cf/public_/tables/records/UniRecord.class
 com/app/enums/TaxErrorEnum.class
 com/cf/public_/Tables.class
@@ -11,16 +13,14 @@ com/cf/public_/tables/records/TaxRecord.class
 com/cf/public_/tables/Qs.class
 com/cf/public_/Keys$UniqueKeys0.class
 com/cf/public_/tables/records/QsRecord.class
-com/app/TaxRepository.class
 com/app/enums/MonthEnum.class
 com/app/TaxFilingRecord.class
 com/app/DSLContextBean.class
-com/app/Repository.class
 com/cf/DefaultCatalog.class
 com/cf/public_/tables/Uni.class
 com/app/enums/TaxTypeEnum.class
-com/app/TaxRepository$1.class
 com/app/enums/EnumIdInterface.class
+com/app/TaxRepositoryInterface.class
 com/cf/public_/tables/Filings.class
 com/app/QueryRequest.class
 com/cf/public_/tables/Tax.class
@@ -28,4 +28,3 @@ com/app/MyController.class
 com/app/CalculationService.class
 com/cf/public_/tables/records/FilingsRecord.class
 com/app/Application.class
-com/app/TaxSpecification.class

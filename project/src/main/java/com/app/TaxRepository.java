@@ -3,15 +3,12 @@ package com.app;
 import com.app.enums.FilingFrequencyEnum;
 import com.app.enums.TaxErrorEnum;
 import com.app.enums.TaxTypeEnum;
-import com.cf.public_.tables.Tax;
 import com.cf.public_.tables.records.FilingsRecord;
 import com.cf.public_.tables.records.TaxRecord;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.Configuration;
-import org.jooq.DSLContext;
-import org.jooq.Result;
-import org.jooq.TransactionalRunnable;
+import org.jooq.*;
 import org.jooq.exception.DataAccessException;
+import org.jooq.impl.DefaultConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,18 +21,41 @@ import static com.cf.public_.Tables.TAX;
 
 @Repository
 @Slf4j
-public class TaxRepository implements com.app.Repository<TaxFilingRecord>, TaxSpecification<QueryRequest> {
+public class TaxRepository implements TaxRepositoryInterface<TaxFilingRecord>, TaxSpecificationInterface<QueryRequest>, TransactionalRunnable {
 
+    @Autowired
+    private DSLContext dslContext;
     @Autowired
     private DataSource dataSource;
     @Autowired
-    private DSLContext dslContext;
+    private Configuration configuration;
+    @Override
+    public void run(Configuration configuration1) {
+        TaxFilingRecord taxFilingRecord = (TaxFilingRecord) configuration.data("key");
+        if (taxFilingRecord == null) {
+            log.error("NULL");
+            return;
+        }
+        log.info("---" + taxFilingRecord.toString() + "---");
+        int id = dslContext.insertInto(TAX, TAX.APP_ID, TAX.STATE, TAX.FROM_YEAR, TAX.TO_YEAR, TAX.TAX_TYPE, TAX.FILING_FREQENCY)
+                .values(taxFilingRecord.getAppId(), taxFilingRecord.getState(), taxFilingRecord.getFromYear(), taxFilingRecord.getToYear(),
+                        TaxTypeEnum.valueOf(taxFilingRecord.getTaxType()).id(), FilingFrequencyEnum.valueOf(taxFilingRecord.getFilingFrequency()).id())
+                .returning().fetchOne().getId();
+        log.info("ID GENERATED " + id);
+        int res = dslContext.insertInto(FILINGS, FILINGS.ID, FILINGS.JAN, FILINGS.FEB, FILINGS.MAR, FILINGS.APR, FILINGS.MAY,
+                FILINGS.JUN, FILINGS.JUL, FILINGS.AUG, FILINGS.SEP, FILINGS.OCT, FILINGS.NOV, FILINGS.DEC)
+                .values(id, (taxFilingRecord.getJan()), (taxFilingRecord.getFeb()), (taxFilingRecord.getMar()),
+                        (taxFilingRecord.getApr()), (taxFilingRecord.getMay()), (taxFilingRecord.getJun()),
+                        (taxFilingRecord.getJul()), (taxFilingRecord.getAug()), (taxFilingRecord.getSep()),
+                        (taxFilingRecord.getOct()), (taxFilingRecord.getNov()), (taxFilingRecord.getDec()))
+                .execute();
+    }
 
     public TaxErrorEnum insertTaxFilingRecord(TaxFilingRecord taxFilingRecord) {
         try {
-            dslContext.transaction(new TransactionalRunnable() {
+            /*dslContext.transaction(new TransactionalRunnable() {
                 @Override
-                public void run(Configuration configuration) throws Exception {
+                public void run(Configuration configuration) {
                     int id = dslContext.insertInto(TAX, TAX.APP_ID, TAX.STATE, TAX.FROM_YEAR, TAX.TO_YEAR, TAX.TAX_TYPE, TAX.FILING_FREQENCY)
                             .values(taxFilingRecord.getAppId(), taxFilingRecord.getState(), taxFilingRecord.getFromYear(), taxFilingRecord.getToYear(),
                                     TaxTypeEnum.valueOf(taxFilingRecord.getTaxType()).id(), FilingFrequencyEnum.valueOf(taxFilingRecord.getFilingFrequency()).id())
@@ -47,14 +67,13 @@ public class TaxRepository implements com.app.Repository<TaxFilingRecord>, TaxSp
                                     (taxFilingRecord.getApr()), (taxFilingRecord.getMay()), (taxFilingRecord.getJun()),
                                     (taxFilingRecord.getJul()), (taxFilingRecord.getAug()), (taxFilingRecord.getSep()),
                                     (taxFilingRecord.getOct()), (taxFilingRecord.getNov()), (taxFilingRecord.getDec()))
-                            .execute();
-                    log.info("RES " + res);
-                }
-            });
+                            .execute();*/
+            /*configuration.data("key", taxFilingRecord);
+            dslContext.transaction(this::run);*/
+            // log.info("RES " + res);
             return TaxErrorEnum.SUCCESS;
         } catch (DataAccessException d) {
-            d.printStackTrace();
-            log.error("ROLLING BACK TRANSACTION");
+            log.error("ROLLING BACK TRANSACTION" + d);
             return TaxErrorEnum.INSERT_ERROR;
         }
     }
@@ -68,10 +87,8 @@ public class TaxRepository implements com.app.Repository<TaxFilingRecord>, TaxSp
                     taxRecord.delete();
             });
             return TaxErrorEnum.SUCCESS;
-        } catch (DataAccessException d)
-        {
-            d.printStackTrace();
-            log.error("ROLLING BACK TRANSACTION");
+        } catch (DataAccessException d) {
+            log.error("ROLLING BACK TRANSACTION" + d);
             return TaxErrorEnum.DELETE_ERROR;
         }
     }
@@ -98,7 +115,7 @@ public class TaxRepository implements com.app.Repository<TaxFilingRecord>, TaxSp
                 }
             });
             return TaxErrorEnum.SUCCESS;
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("ERROR IN UPDATING" + e);
             return TaxErrorEnum.UPDATE_ERROR;
         }

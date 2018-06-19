@@ -4,9 +4,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum  TaxErrorEnum implements EnumIdInterface{
+public enum TaxErrorEnum implements EnumIdInterface {
 
-    SUCCESS(0,"SUCCESS"),
+    SUCCESS(0, "SUCCESS"),
     INSERT_ERROR(10, "ERORR IN INSERTING"),
     UPDATE_ERROR(20, "ERROR IN UPDATING"),
     DELETE_ERROR(30, "ERROR IN DELETING");

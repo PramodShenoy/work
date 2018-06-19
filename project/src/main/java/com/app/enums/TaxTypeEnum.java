@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TaxTypeEnum implements EnumIdInterface{
+public enum TaxTypeEnum implements EnumIdInterface {
 
     VAT(10, "VAT"),
     ST(20, "ST"),

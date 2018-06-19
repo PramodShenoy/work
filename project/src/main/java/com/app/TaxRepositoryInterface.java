@@ -4,7 +4,7 @@ import com.app.enums.TaxErrorEnum;
 
 import java.util.List;
 
-public interface Repository<T> {
+public interface TaxRepositoryInterface<T> {
 
     TaxErrorEnum insertTaxFilingRecord(T data);
 

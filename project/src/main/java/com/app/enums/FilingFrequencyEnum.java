@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum FilingFrequencyEnum implements EnumIdInterface{
+public enum FilingFrequencyEnum implements EnumIdInterface {
 
     MONTHLY(10, "MONTHLY"),
     QUARTERLY(20, "QUARTERLY"),

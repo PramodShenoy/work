@@ -22,6 +22,8 @@ public class MyController {
     private CalculationService calculationService;
     @Autowired
     private TaxRepository taxRepository;
+    @Autowired
+    private InsertTaxDataService insertTaxDataService;
 
     @RequestMapping(value = "/getRange", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Double>> get(@RequestBody QueryRequest queryRequest) {
@@ -35,9 +37,10 @@ public class MyController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseEntity<TaxErrorEnum> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
-        TaxErrorEnum errorCode = taxRepository.insertTaxFilingRecord(taxFilingRecord);
-        return new ResponseEntity<>(errorCode, HttpStatus.OK);
+    public ResponseEntity<String> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
+        // TaxErrorEnum errorCode = taxRepository.insertTaxFilingRecord(taxFilingRecord);
+        insertTaxDataService.insertTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/updateTaxFilingRecord", method = RequestMethod.POST)

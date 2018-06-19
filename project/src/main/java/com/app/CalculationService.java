@@ -99,8 +99,8 @@ public class CalculationService {
     private double getSumFromTo(String fromMonth, List<TaxFilingRecord> taxFilingRecordList, String toMonth
     ) {
         double sum = 0.0;
-        int startIndex = MonthEnum.valueOf(fromMonth).id()-1;
-        int endIndex = MonthEnum.valueOf(toMonth).id()-1;
+        int startIndex = MonthEnum.valueOf(fromMonth).id() - 1;
+        int endIndex = MonthEnum.valueOf(toMonth).id() - 1;
         for (TaxFilingRecord rowResult : taxFilingRecordList) {
             try {
                 int i = startIndex;
