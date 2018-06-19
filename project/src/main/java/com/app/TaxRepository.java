@@ -21,7 +21,7 @@ import static com.cf.public_.Tables.TAX;
 
 @Repository
 @Slf4j
-public class TaxRepository implements TaxSpecificationInterface<QueryRequest>, TransactionalRunnable {
+public class TaxRepository implements TransactionalRunnable {
 
     @Autowired
     private DSLContext dslContext;
@@ -78,25 +78,26 @@ public class TaxRepository implements TaxSpecificationInterface<QueryRequest>, T
         }
     }
 
-    public List<TaxFilingRecord> query(QueryRequest queryRequest) {
-        UUID appId = queryRequest.getAppId();
-        int fromYear = queryRequest.getFromYear();
-        int toYear = queryRequest.getToYear();
-        String state = queryRequest.getState();
-        if (stateSpecified(queryRequest))
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId).and(TAX.STATE.equalIgnoreCase(state)))
-                    .fetch().into(TaxFilingRecord.class);
-        else if (yearSpecified(queryRequest))
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId).and(TAX.FROM_YEAR.ge(fromYear)).and(TAX.TO_YEAR.le(toYear)))
-                    .fetch().into(TaxFilingRecord.class);
-        else
-            return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
-                    .where(TAX.APP_ID.eq(appId))
-                    .fetch().into(TaxFilingRecord.class);
+    public List<TaxFilingRecord> queryWithState(QueryRequest queryRequest) {
 
+        return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
+                .where(TAX.APP_ID.eq(queryRequest.getAppId()).and(TAX.STATE.equalIgnoreCase(queryRequest.getState())))
+                .fetch().into(TaxFilingRecord.class);
     }
+
+    public List<TaxFilingRecord> queryWithYearRange(QueryRequest queryRequest) {
+        return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
+                .where(TAX.APP_ID.eq(queryRequest.getAppId())
+                        .and(TAX.FROM_YEAR.ge(queryRequest.getFromYear())).and(TAX.TO_YEAR.le(queryRequest.getToYear())))
+                .fetch().into(TaxFilingRecord.class);
+    }
+
+    public List<TaxFilingRecord> queryWithAppIdOnly(QueryRequest queryRequest) {
+        return dslContext.selectFrom(TAX.innerJoin(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
+                .where(TAX.APP_ID.eq(queryRequest.getAppId()))
+                .fetch().into(TaxFilingRecord.class);
+    }
+
 
     public Result<?> getJoinFromYear(int fromYear, UUID appId) {
         return dslContext.selectFrom(TAX.join(FILINGS).on(TAX.ID.eq(FILINGS.ID)))
@@ -110,13 +111,5 @@ public class TaxRepository implements TaxSpecificationInterface<QueryRequest>, T
                 .fetch();
     }
 
-    @Override
-    public boolean stateSpecified(QueryRequest obj) {
-        return obj.getState() != null;
-    }
 
-    @Override
-    public boolean yearSpecified(QueryRequest obj) {
-        return obj.getFromYear() != 0 && obj.getToYear() != 0;
-    }
 }

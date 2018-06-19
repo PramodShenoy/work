@@ -1,5 +1,6 @@
 package com.app;
 
+import com.app.enums.TaxErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -18,14 +19,16 @@ public class UpdateTaxFilingDataService {
     @Autowired
     private DSLContext dslContext;
 
-    public void updateTaxFilingData(TaxFilingRecord taxFilingRecord) {
+    public TaxErrorEnum updateTaxFilingData(TaxFilingRecord taxFilingRecord) {
         try {
             configuration.data("crudOperation", "update");
             configuration.data("data", taxFilingRecord);
             log.info("+++" + taxFilingRecord.toString() + "+++");
             dslContext.transaction(taxRepository);
+            return TaxErrorEnum.SUCCESS;
         } catch (DataAccessException d) {
             log.error("ERROR IN INSERTING" + d);
+            return TaxErrorEnum.UPDATE_ERROR;
         }
     }
 }

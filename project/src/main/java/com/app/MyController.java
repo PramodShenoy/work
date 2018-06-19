@@ -1,6 +1,7 @@
 package com.app;
 
 
+import com.app.enums.TaxErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,13 @@ public class MyController {
     @Autowired
     private CalculationService calculationService;
     @Autowired
-    private TaxRepository taxRepository;
-    @Autowired
     private InsertTaxDataService insertTaxDataService;
     @Autowired
     private DeleteTaxFilingDataService deleteTaxFilingDataService;
     @Autowired
     private UpdateTaxFilingDataService updateTaxFilingDataService;
+    @Autowired
+    private QueryService queryService;
 
     @RequestMapping(value = "/getRange", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Double>> get(@RequestBody QueryRequest queryRequest) {
@@ -40,28 +41,27 @@ public class MyController {
     }
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseEntity<String> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
-        // TaxErrorEnum errorCode = taxRepository.insertTaxFilingRecord(taxFilingRecord);
-        insertTaxDataService.insertTaxFilingData(taxFilingRecord);
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> insert(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = insertTaxDataService.insertTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<String> update(@RequestBody TaxFilingRecord taxFilingRecord) {
-        updateTaxFilingDataService.updateTaxFilingData(taxFilingRecord);
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> update(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = updateTaxFilingDataService.updateTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseEntity<String> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
-        deleteTaxFilingDataService.deleteTaxFilingData(taxFilingRecord);
-        return new ResponseEntity<>("DONE", HttpStatus.OK);
+    public ResponseEntity<TaxErrorEnum> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
+        TaxErrorEnum errorCode = deleteTaxFilingDataService.deleteTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>(errorCode, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     public ResponseEntity<List<TaxFilingRecord>> search(@RequestBody QueryRequest queryRequest) {
         log.info(queryRequest.toString());
-        List<TaxFilingRecord> taxFilingRecord = taxRepository.query(queryRequest);
+        List<TaxFilingRecord> taxFilingRecord = queryService.query(queryRequest);
         return new ResponseEntity<>(taxFilingRecord, HttpStatus.OK);
     }
 }
