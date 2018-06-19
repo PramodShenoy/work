@@ -7,9 +7,9 @@ import org.jooq.exception.DataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
-public class InsertTaxDataService {
+@Service
+public class UpdateTaxFilingDataService {
 
     @Autowired
     private TaxRepository taxRepository;
@@ -18,9 +18,9 @@ public class InsertTaxDataService {
     @Autowired
     private DSLContext dslContext;
 
-    public void insertTaxFilingData(TaxFilingRecord taxFilingRecord) {
+    public void updateTaxFilingData(TaxFilingRecord taxFilingRecord) {
         try {
-            configuration.data("crudOperation", "insert");
+            configuration.data("crudOperation", "update");
             configuration.data("data", taxFilingRecord);
             log.info("+++" + taxFilingRecord.toString() + "+++");
             dslContext.transaction(taxRepository);
@@ -28,5 +28,4 @@ public class InsertTaxDataService {
             log.error("ERROR IN INSERTING" + d);
         }
     }
-
 }

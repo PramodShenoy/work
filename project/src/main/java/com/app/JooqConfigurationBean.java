@@ -20,8 +20,7 @@ public class JooqConfigurationBean {
     private Configuration configuration;
 
     @Bean
-    public Configuration getConfiguration()
-    {
+    public Configuration getConfiguration() {
         configuration = new DefaultConfiguration().set(dataSource)
                 .set(SQLDialect.DEFAULT);
         return configuration;

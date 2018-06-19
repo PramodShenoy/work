@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class InsertTaxDataService {
-
+public class DeleteTaxFilingDataService {
     @Autowired
     private TaxRepository taxRepository;
     @Autowired
@@ -18,9 +17,9 @@ public class InsertTaxDataService {
     @Autowired
     private DSLContext dslContext;
 
-    public void insertTaxFilingData(TaxFilingRecord taxFilingRecord) {
+    public void deleteTaxFilingData(TaxFilingRecord taxFilingRecord) {
         try {
-            configuration.data("crudOperation", "insert");
+            configuration.data("crudOperation", "delete");
             configuration.data("data", taxFilingRecord);
             log.info("+++" + taxFilingRecord.toString() + "+++");
             dslContext.transaction(taxRepository);

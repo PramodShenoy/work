@@ -1,7 +1,6 @@
 package com.app;
 
 
-import com.app.enums.TaxErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,10 @@ public class MyController {
     private TaxRepository taxRepository;
     @Autowired
     private InsertTaxDataService insertTaxDataService;
+    @Autowired
+    private DeleteTaxFilingDataService deleteTaxFilingDataService;
+    @Autowired
+    private UpdateTaxFilingDataService updateTaxFilingDataService;
 
     @RequestMapping(value = "/getRange", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Double>> get(@RequestBody QueryRequest queryRequest) {
@@ -43,16 +46,16 @@ public class MyController {
         return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/updateTaxFilingRecord", method = RequestMethod.POST)
-    public ResponseEntity<TaxErrorEnum> update(@RequestBody TaxFilingRecord taxFilingRecord) {
-        TaxErrorEnum errorCode = taxRepository.updateTaxFilingRecord(taxFilingRecord);
-        return new ResponseEntity<>(errorCode, HttpStatus.OK);
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseEntity<String> update(@RequestBody TaxFilingRecord taxFilingRecord) {
+        updateTaxFilingDataService.updateTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/deleteTaxFilingRecord", method = RequestMethod.POST)
-    public ResponseEntity<TaxErrorEnum> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
-        TaxErrorEnum errorCode = taxRepository.deleteTaxFilingRecord(taxFilingRecord);
-        return new ResponseEntity<>(errorCode, HttpStatus.OK);
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ResponseEntity<String> delete(@RequestBody TaxFilingRecord taxFilingRecord) {
+        deleteTaxFilingDataService.deleteTaxFilingData(taxFilingRecord);
+        return new ResponseEntity<>("DONE", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
