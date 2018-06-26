@@ -1,0 +1,107 @@
+sudo -u postgres psql psotgres for logging in to superadmin postgres user
+psql -d database_name -U user_name for logging in to other user
+
+\list to show all databases
+\q to quit
+\c dbname to change database
+\dt to show all tables in a database
+\d+ or \d to describe table structure
+show search_path; to show current path in which postgres looks for tables and views
+
+## Creating new User 
+
+sudo -u postgres createuser <username>
+sudo -u postgres createdb <dbname>
+sudo -u postgres psql //goes into postgres superadmin terminal mode
+alter user <username> with encrypted password '<password>'; //note the ;
+grant all privileges on database <dbname> to <username>;
+
+## Utility psql commands
+
+select current_user; //shows current user
+select current_database(); //shows current database in use
+COPY weather FROM '/home/user/weather.txt'; //to poulate values of table 'weather' from text file in path
+\! clear to clear screen # notice the space between ! and c
+select table_name from INFORMATION_SCHEMA.views WHERE table_schema = ANY (current_schemas(false)); #to get all user defined schemas
+select nspname
+from pg_catalog.pg_namespace; # select all schemas from database
+
+## Commands
+insert into dates(dob,id) values(to_date('14/5/2000','DD-MM-YYYY'),1);//for inserting date type values into table
+CREATE TYPE inventory_item AS (
+   name text,
+   supplier_id integer,
+   price numeric
+);
+//creating own type
+CREATE TABLE on_hand (
+   item inventory_item,
+   count integer
+);
+// use own type for other table
+INSERT INTO on_hand VALUES (ROW('fuzzy dice', 42, 1.99), 1000);
+// inserting composite data type into table
+SELECT (item).name FROM on_hand WHERE (item).price > 9.99;
+// accessing one variable of a composite type
+
+## Schema
+Postgres schema = collection of tables with same namespace
+It can also contain views,data types,sequences etc.
+default = 'public' schema
+
+## creating schema
+create schema <schema_name>;
+
+## creating table in schema
+create table <schema_name>.<table_name> (
+//declare variables and constraints
+);
+
+## put schema in current path
+set search_path to <schema_name>;
+set search_path to <schema_name>,public;
+
+## comparison of non string data types usig like clause
+SELECT * FROM COMPANY WHERE AGE::text LIKE '2%';
+
+
+create view trial_view as
+select distinct trial.id,name from trial2 inner join trial on (trial.id=trial2.id);
+
+select trial.id,max(trial.time)  from trial,trial_view where trial.id = trial_view.id group by trial.id;
+
+
+//link for partition/window function http://www.postgresqltutorial.com/postgresql-window-function/
+//partition window function
+SELECT
+ product_name,
+ group_name,
+ price,
+ ROW_NUMBER () OVER (
+ PARTITION BY group_name
+ ORDER BY
+ price
+ )
+FROM
+ products
+INNER JOIN product_groups USING (group_id);
+
+SELECT
+ product_name,
+ group_name,
+ price,
+ LAG (price, 1) OVER (
+ PARTITION BY group_name
+ ORDER BY
+ price
+ ) AS prev_price,
+ price - LAG (price, 1) OVER (
+ PARTITION BY group_name
+ ORDER BY
+ price
+ ) AS cur_prev_diff
+FROM
+ products
+INNER JOIN product_groups USING (group_id);
+
+

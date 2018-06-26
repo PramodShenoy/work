@@ -1,0 +1,24 @@
+curl -i -X POST -H "Content-Type:application/json" -d '{ "firstName" : "ABC1","lastName":"XYZ1"}' localhost:8080/persons
+curl -i -X POST -H "Content-Type:application/json" -d '{ "userId":123,"itemId":"1234","discount":0.10}' localhost:8080/pay?key=SHARED_KEY
+curl -X POST --header "Content-Type:text/xml;charset=UTF-8" --data @input.xml localhost:8080/pay?key=SHARED_KEY
+curl -X POST --header "Content-Type:text/xml;charset=UTF-8" --data '<customer>
+<firstname>wwerwe</firstname>
+<lastname>fergf</lastname>
+<age>30</age>
+</customer>' localhost:8080/customer
+
+curl -X POST --header "Content-Type:text/xml;charset=UTF-8" --data '<customer firstname="dfsdf" lastname="pojh" age="30"/>' localhost:8080/customer
+
+
+for changing port number
+
+mvn spring-boot:run -Dserver.port=8
+
+lsof -i :8000 to find which process is listening to port number x
+
+git ls-files -z | xargs -0 wc -l  for loc in local git repo
+
+curl -i -X POST -H "Content-Type:application/json" -d '{ "articleId" : "123","title":"apple","category":"fruit"}' localhost:8080/user/article
+
+reliance.email.ccInstitutionMP=pramod.shenoy@learner.manipal.edu
+reliance.email.ccOpsqc=pramodhthegreats@gmail.com

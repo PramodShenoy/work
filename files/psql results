@@ -1,0 +1,47 @@
+    city      | temp_lo | temp_hi | prcp |    date    
+---------------+---------+---------+------+------------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27
+ Bangalore     |      20 |      30 | 0.72 | 2000-03-19
+ San Francisco |      43 |      57 |    0 | 1994-11-29
+ Hayward       |      37 |      54 |  0.1 | 1994-11-29
+(4 rows)
+
+    name      |   location    
+---------------+---------------
+ San Francisco | (-194,53)
+ Bangalore     | (125.73,32.4)
+ Pune          | (200,34.4)
+(3 rows)
+
+
+
+INNER JOIN weather and cities on city=name
+
+     city      | temp_lo | temp_hi | prcp |    date    |     name      |   location    
+---------------+---------+---------+------+------------+---------------+---------------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)
+ Bangalore     |      20 |      30 | 0.72 | 2000-03-19 | Bangalore     | (125.73,32.4)
+ San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)
+(3 rows)
+
+
+
+LEFT OUTER JOIN weather and cities on city=name
+     city      | temp_lo | temp_hi | prcp |    date    |     name      |   location    
+---------------+---------+---------+------+------------+---------------+---------------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)
+ Bangalore     |      20 |      30 | 0.72 | 2000-03-19 | Bangalore     | (125.73,32.4)
+ San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)
+ Hayward       |      37 |      54 |  0.1 | 1994-11-29 |               | 
+(4 rows)
+
+RIGHT OUTER JOIN weather and cities on city=name
+
+     city      | temp_lo | temp_hi | prcp |    date    |     name      |   location    
+---------------+---------+---------+------+------------+---------------+---------------
+ San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)
+ Bangalore     |      20 |      30 | 0.72 | 2000-03-19 | Bangalore     | (125.73,32.4)
+               |         |         |      |            | Pune          | (200,34.4)
+(4 rows)
+
